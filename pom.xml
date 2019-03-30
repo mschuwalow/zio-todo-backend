@@ -5,7 +5,7 @@
 
     <groupId>com.schuwalow</groupId>
     <artifactId>zio-todo</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 
     <name>ZIO Todo Backend</name>
     <packaging>pom</packaging>
