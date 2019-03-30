@@ -64,10 +64,11 @@ workflows:
             branches:
               ignore:
                 - master
+
+  release:
+    jobs:
       - approve-release:
           type: approval
-          requires:
-            - test
           filters:
             branches:
               only:
