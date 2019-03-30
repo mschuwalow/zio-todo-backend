@@ -66,8 +66,8 @@ jobs:
             - ~/.m2
           key: v1-dependencies--{{ checksum "pom.xml" }}
 
-      - run: mvn gitflow:release-start
-      - run: mvn gitflow:release-finish
+      - run: mvn -B gitflow:release-start
+      - run: mvn -B gitflow:release-finish
 
 workflows:
   version: 2
