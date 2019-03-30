@@ -52,6 +52,9 @@ jobs:
 
     steps:
       - setup_remote_docker
+      - run: git config --global user.email "circleci@schuwalow.com"
+      - run: git config --global user.name "cicleci"
+
       - checkout
 
       - restore_cache:
