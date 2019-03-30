@@ -24,7 +24,7 @@
         <version.http4s>0.20.0-M3</version.http4s>
         <version.circe>0.11.1</version.circe>
         <version.slf4j>1.7.26</version.slf4j>
-        <version.zio>0.16</version.zio>
+        <version.zio>1.0-RC3</version.zio>
 
         <mainClass>com.schuwalow.zio.todo.Main</mainClass>
     </properties>

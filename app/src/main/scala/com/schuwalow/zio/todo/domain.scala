@@ -1,6 +1,10 @@
 package com.schuwalow.zio.todo
 
-final case class TodoItem(id: Long, title: String, completed: Boolean, order: Option[Int]) {
+final case class TodoItem(
+  id: Long,
+  title: String,
+  completed: Boolean,
+  order: Option[Int]) {
 
   def update(form: TodoItemPatchForm): TodoItem =
     this.copy(title       = form.title.getOrElse(title),
@@ -9,7 +13,11 @@ final case class TodoItem(id: Long, title: String, completed: Boolean, order: Op
 
 }
 
-final case class TodoItemWithUri(url: String, id: Long, title: String, completed: Boolean, order: Option[Int])
+final case class TodoItemWithUri(
+  url: String, id: Long,
+  title: String,
+  completed: Boolean,
+  order: Option[Int])
 
 object TodoItemWithUri {
 
@@ -18,11 +26,16 @@ object TodoItemWithUri {
 
 }
 
-final case class TodoItemPostForm(title: String, order: Option[Int] = None) {
+final case class TodoItemPostForm(
+  title: String,
+  order: Option[Int] = None) {
 
   def asTodoItem(id: Long): TodoItem =
     TodoItem(id, title, false, order)
 
 }
 
-final case class TodoItemPatchForm(title: Option[String], completed: Option[Boolean], order: Option[Int])
+final case class TodoItemPatchForm(
+  title: Option[String] = None,
+  completed: Option[Boolean] = None,
+  order: Option[Int] = None)

@@ -33,11 +33,11 @@ object Main extends App {
     (for {
       config   <- ZIO.fromEither(pureconfig.loadConfig[Config])
       httpApp   = Router[AppTask](
-            "/todos" -> TodoService(s"${config.baseUrl.value}/todos").service
+                    "/todos" -> TodoService(s"${config.baseUrl.value}/todos").service
                   ).orNotFound
       server    = ZIO.runtime[AppEnvironment].flatMap { implicit rts =>
                     BlazeServerBuilder[AppTask]
-                      .bindHttp(config.port.value)
+                      .bindHttp(config.port.value, "0.0.0.0")
                       .withHttpApp(CORS(httpApp))
                       .serve
                       .compile[AppTask, AppTask, ExitCode]
