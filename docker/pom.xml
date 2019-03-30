@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.schuwalow</groupId>
         <artifactId>zio-todo</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 
