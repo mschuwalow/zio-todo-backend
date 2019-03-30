@@ -22,6 +22,7 @@ jobs:
       TERM: dumb
 
     steps:
+      - setup_remote_docker
       - checkout
 
       # Download and cache dependencies
@@ -39,4 +40,4 @@ jobs:
           key: v1-dependencies--{{ checksum "pom.xml" }}
 
       # run tests!
-      - run: mvn test
+      - run: mvn package
