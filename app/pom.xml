@@ -25,6 +25,7 @@
         <version.circe>0.11.1</version.circe>
         <version.slf4j>1.7.26</version.slf4j>
         <version.zio>1.0-RC3</version.zio>
+        <version.doobie>0.7.0-M3</version.doobie>
 
         <mainClass>com.schuwalow.zio.todo.Main</mainClass>
     </properties>
@@ -101,14 +102,37 @@
             <version>0.10.2</version>
         </dependency>
         <dependency>
+            <groupId>org.tpolecat</groupId>
+            <artifactId>doobie-core_${version.scala.epoch}</artifactId>
+            <version>${version.doobie}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.tpolecat</groupId>
+            <artifactId>doobie-hikari_${version.scala.epoch}</artifactId>
+            <version>${version.doobie}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>5.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.199</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${version.scala.epoch}</artifactId>
             <version>3.0.5</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.scalamock</groupId>
             <artifactId>scalamock_${version.scala.epoch}</artifactId>
             <version>4.1.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
