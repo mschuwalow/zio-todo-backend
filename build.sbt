@@ -90,10 +90,10 @@ releaseProcess := Seq(
   pushChanges,
   tagRelease,
   mergeReleaseVersion,
+  ReleaseStep(releaseStepTask(publish in Docker)),
   setNextVersion,
   commitNextVersion,
-  pushChanges,
-  ReleaseStep(releaseStepTask(publish in Docker))
+  pushChanges
 )
 
 val mergeBranch = "master"
