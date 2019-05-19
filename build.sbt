@@ -33,7 +33,7 @@ lazy val root = (project in file("."))
       "-language:existentials",
       "-Ypartial-unification",
       "-Xfatal-warnings",
-      "-Xlint:_",
+      "-Xlint:-infer-any,_",
       "-Ywarn-value-discard",
       "-Ywarn-numeric-widen",
       "-Ywarn-extra-implicit",
@@ -72,3 +72,19 @@ lazy val root = (project in file("."))
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0-M4")
     )
   )
+
+//release
+import ReleaseTransformations._
+releaseProcess := Seq(
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  ReleaseStep(releaseStepTask(publish in Docker)),
+  setNextVersion,
+  commitNextVersion,
+  pushChanges
+)
