@@ -52,7 +52,7 @@ object config {
     val res = xa
       .allocated
       .map { case (transactor, cleanupM) =>
-        ZManaged.Reservation(ZIO.succeed(transactor), cleanupM.orDie)
+        Reservation(ZIO.succeed(transactor), cleanupM.orDie)
       }.uninterruptible
 
     Managed(res)

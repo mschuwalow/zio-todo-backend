@@ -36,13 +36,13 @@ final case class TodoService[R <: TodoRepository](rootUri: String) {
 
       case req @ POST -> Root =>
         req.decode[TodoItemPostForm] { todoItemForm =>
-          Created(create(todoItemForm).map(TodoItemWithUri(rootUri, _)))
+          create(todoItemForm).map(TodoItemWithUri(rootUri, _)).flatMap(Created(_))
         }
 
       case DELETE -> Root / LongVar(id) =>
         for {
           item     <- getById(TodoId(id))
-          result   <- item.map(x => delete(x.id)).fold(NotFound())(Ok(_))
+          result   <- item.map(x => delete(x.id)).fold(NotFound())(_.flatMap(Ok(_)))
         } yield result
 
       case DELETE -> Root =>
