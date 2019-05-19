@@ -34,7 +34,7 @@ object config {
         .dataSource(cfg.url, cfg.user, cfg.password)
         .load()
       fw.migrate()
-    }.void
+    }.unit
 
   def mkTransactor(
     cfg: DBConfig,

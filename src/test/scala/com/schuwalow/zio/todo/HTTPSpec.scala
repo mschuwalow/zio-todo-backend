@@ -3,6 +3,7 @@ package com.schuwalow.zio.todo
 import cats.effect.Sync
 import cats.implicits._
 import org.http4s.{EntityDecoder, Method, Request, Response, Status, Uri}
+import org.scalatest.Assertion
 
 class HTTPSpec extends UnitSpec {
 
@@ -19,8 +20,8 @@ class HTTPSpec extends UnitSpec {
   ): F[Unit] =
     for {
       actual       <- actual
-      _            <- expectedBody.fold[F[Unit]](
-                        actual.body.compile.toVector.map(_.isEmpty))(
+      _            <- expectedBody.fold[F[Assertion]](
+                        actual.body.compile.toVector.map(s => assert(s.isEmpty)))(
                         expected => actual.as[A].map(x => assert(x === expected, s"Body was $x instead of $expected.") )
                       )
       _            <- F.delay(assert(actual.status == expectedStatus, s"Status was ${actual.status} instead of $expectedStatus."))

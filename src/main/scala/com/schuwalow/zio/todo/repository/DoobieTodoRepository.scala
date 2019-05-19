@@ -34,7 +34,7 @@ trait DoobieTodoRepository extends TodoRepository {
           .delete(id)
           .run
           .transact(xa)
-          .void
+          .unit
           .orDie
 
       override def deleteAll: ZIO[Any, Nothing, Unit] =
@@ -42,7 +42,7 @@ trait DoobieTodoRepository extends TodoRepository {
           .deleteAll
           .run
           .transact(xa)
-          .void
+          .unit
           .orDie
 
       override def create(todoItemForm: TodoItemPostForm): ZIO[Any, Nothing, TodoItem] =

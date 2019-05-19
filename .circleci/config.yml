@@ -19,18 +19,14 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            - v1-dependencies-
+          key: scala-library-dependencies-{{ checksum "build.sbt" }}
 
-      - run: mvn test-compile
-
+      - run: sbt test:compile
       - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies--{{ checksum "pom.xml" }}
+          paths: [ "~/.m2", "~/.ivy2", "~/.cache/coursier" ]
+          key: scala-library-dependencies-{{ checksum "build.sbt" }}
 
-      - run: mvn package
+      - run: sbt test
 
   release:
     docker:
@@ -48,12 +44,9 @@ jobs:
 
       - checkout
       - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            - v1-dependencies-
+          key: scala-library-dependencies-{{ checksum "build.sbt" }}
 
-      - run: mvn -B gitflow:release-start
-      - run: mvn -B gitflow:release-finish
+      - run: sbt release with-defaults
 
 workflows:
   version: 2
