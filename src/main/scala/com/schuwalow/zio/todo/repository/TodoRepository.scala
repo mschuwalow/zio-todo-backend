@@ -36,10 +36,10 @@ object TodoRepository extends Serializable {
       ref.get.map(_.get(id))
 
     override def delete(id: TodoId): ZIO[Any, Nothing, Unit] =
-      ref.update(store => store - id).void
+      ref.update(store => store - id).unit
 
     override def deleteAll: ZIO[Any, Nothing, Unit] =
-      ref.update(_.empty).void
+      ref.update(_.empty).unit
 
     override def create(todoItemForm: TodoItemPostForm): ZIO[Any, Nothing, TodoItem] =
       for {
