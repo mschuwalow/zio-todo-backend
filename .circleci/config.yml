@@ -46,7 +46,7 @@ jobs:
       - restore_cache:
           key: scala-library-dependencies-{{ checksum "build.sbt" }}
 
-      - run: sbt release --with-defaults
+      - run: sbt "release with-defaults"
 
 workflows:
   version: 2
