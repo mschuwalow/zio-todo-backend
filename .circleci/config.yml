@@ -39,6 +39,7 @@ jobs:
 
     steps:
       - setup_remote_docker
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run: git config --global user.email "circleci@schuwalow.com"
       - run: git config --global user.name "cicleci"
 
@@ -67,5 +68,6 @@ workflows:
               only:
                 - develop
       - release:
+          context: global
           requires:
             - approve-release
