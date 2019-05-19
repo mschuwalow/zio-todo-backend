@@ -57,6 +57,7 @@ lazy val root = (project in file("."))
 
       "com.h2database"              %  "h2"                       % H2Version,
       "org.flywaydb"                %  "flyway-core"              % FlywayVersion,
+      "org.slf4j"                   %  "slf4j-log4j12"            % "1.7.26",
 
       "com.typesafe.scala-logging"  %% "scala-logging"            % ScalaLogVersion,
 
@@ -75,6 +76,10 @@ lazy val root = (project in file("."))
 
 //release
 import ReleaseTransformations._
+import ReleasePlugin.autoImport._
+import sbtrelease.{Git, Utilities}
+import Utilities._
+
 releaseProcess := Seq(
   checkSnapshotDependencies,
   inquireVersions,
@@ -82,9 +87,29 @@ releaseProcess := Seq(
   runTest,
   setReleaseVersion,
   commitReleaseVersion,
+  pushChanges,
   tagRelease,
-  ReleaseStep(releaseStepTask(publish in Docker)),
+  mergeReleaseVersion,
   setNextVersion,
   commitNextVersion,
-  pushChanges
+  pushChanges,
+  ReleaseStep(releaseStepTask(publish in Docker))
 )
+
+val mergeBranch = "master"
+
+val mergeReleaseVersion = ReleaseStep(action = st => {
+  val git = st.extract.get(releaseVcs).get.asInstanceOf[Git]
+  val curBranch = (git.cmd("rev-parse", "--abbrev-ref", "HEAD") !!).trim
+  st.log.info(s"####### current branch: $curBranch")
+  git.cmd("checkout", mergeBranch) ! st.log
+  st.log.info(s"####### pull $mergeBranch")
+  git.cmd("pull") ! st.log
+  st.log.info(s"####### merge")
+  git.cmd("merge", curBranch, "--no-ff", "--no-edit") ! st.log
+  st.log.info(s"####### push")
+  git.cmd("push", "origin", s"$mergeBranch:$mergeBranch") ! st.log
+  st.log.info(s"####### checkout $curBranch")
+  git.cmd("checkout", curBranch) ! st.log
+  st
+})
