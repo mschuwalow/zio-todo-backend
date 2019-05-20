@@ -20,7 +20,7 @@ lazy val root = (project in file("."))
     organization := "com.schuwalow",
     name := "zio-todo-backend",
     maintainer := "maxim.schuwalow@gmail.com",
-    licenses := Seq("MIT" -> url(s"https://github.com/sbt/${name.value}/blob/${version.value}/LICENSE")),
+    licenses := Seq("MIT" -> url(s"https://github.com/mschuwalow/${name.value}/blob/v${version.value}/LICENSE")),
     scalaVersion := "2.12.8",
     scalacOptions := Seq(
       "-feature",
