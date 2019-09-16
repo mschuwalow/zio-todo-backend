@@ -2,6 +2,7 @@ package com.schuwalow.zio.todo.repository
 
 import com.schuwalow.zio.todo.{ TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm }
 import zio._
+import zio.delegate.Mix
 
 trait TodoRepository extends Serializable {
 
@@ -27,7 +28,24 @@ object TodoRepository extends Serializable {
 
   }
 
-  final case class InMemoryTodoRepository(ref: Ref[Map[TodoId, TodoItem]], counter: Ref[Long]) extends Service[Any] {
+  def withInMemoryRepository[R](ref: Ref[Map[TodoId, TodoItem]], counter: Ref[Long])(
+    implicit ev: R Mix TodoRepository
+  ): ZIO[R, Nothing, R with TodoRepository] =
+    ZIO
+      .environment[R]
+      .map(
+        r =>
+          ev.mix(r, new TodoRepository {
+            val todoRepository = new InMemoryTodoRepository(ref, counter)
+          })
+      )
+
+  def withInMemoryRepositoryManaged[R](ref: Ref[Map[TodoId, TodoItem]], counter: Ref[Long])(
+    implicit ev: R Mix TodoRepository
+  ): ZManaged[R, Nothing, R with TodoRepository] =
+    withInMemoryRepository(ref, counter).toManaged_
+
+  final class InMemoryTodoRepository(ref: Ref[Map[TodoId, TodoItem]], counter: Ref[Long]) extends Service[Any] {
 
     override def getAll(): ZIO[Any, Nothing, List[TodoItem]] =
       ref.get.map(_.values.toList)

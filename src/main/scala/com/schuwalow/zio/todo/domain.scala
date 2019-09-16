@@ -1,5 +1,8 @@
 package com.schuwalow.zio.todo
 
+import io.circe.Decoder
+import io.circe.generic.semiauto._
+
 final case class TodoId(value: Long) extends AnyVal
 
 final case class TodoPayload(
@@ -37,8 +40,16 @@ final case class TodoItemPostForm(
 
 }
 
+object TodoItemPostForm {
+  implicit val decoder: Decoder[TodoItemPostForm] = deriveDecoder
+}
+
 final case class TodoItemPatchForm(
   title: Option[String] = None,
   completed: Option[Boolean] = None,
   order: Option[Int] = None
 )
+
+object TodoItemPatchForm {
+  implicit val decoder: Decoder[TodoItemPatchForm] = deriveDecoder
+}

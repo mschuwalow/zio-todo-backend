@@ -10,20 +10,34 @@ class HTTPSpec extends UnitSpec {
   protected def request[F[_]](method: Method, uri: String): Request[F] =
     Request(method = method, uri = Uri.fromString(uri).toOption.get)
 
-  protected def check[F[_], A](
+  protected def check[F[_]: Sync, A](
     actual: F[Response[F]],
     expectedStatus: Status,
     expectedBody: Option[A]
-  )(
-    implicit
-    F: Sync[F],
-    ev: EntityDecoder[F, A]
-  ): F[Unit] =
+  )(implicit ev: EntityDecoder[F, A]): F[Unit] =
     for {
       actual <- actual
-      _ <- expectedBody.fold[F[Assertion]](actual.body.compile.toVector.map(s => assert(s.isEmpty)))(
-            expected => actual.as[A].map(x => assert(x === expected, s"Body was $x instead of $expected."))
-          )
-      _ <- F.delay(assert(actual.status == expectedStatus, s"Status was ${actual.status} instead of $expectedStatus."))
+      _ <- expectedBody
+            .fold[F[Assertion]](
+              actual.bodyAsText.compile.toVector.map(b => assert(b.isEmpty, s"-> Expected empty body, but got $b"))
+            )(
+              expected =>
+                actual
+                  .as[A]
+                  .map(x => assert(x === expected, s"-> Body was $x instead of $expected."))
+            )
+            .void
+      _ <- Sync[F]
+            .delay(
+              assert(actual.status == expectedStatus, s"-> Status was ${actual.status} instead of $expectedStatus.")
+            )
+            .void
     } yield ()
+
+  protected def checkRaw[F[_]: Sync, A](
+    actual: F[Response[F]],
+    expectedStatus: Status,
+    expectedBody: String
+  ): F[Unit] = check[F, String](actual, expectedStatus, Some(expectedBody))(Sync[F], EntityDecoder.text)
+
 }

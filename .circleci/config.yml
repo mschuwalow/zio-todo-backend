@@ -21,7 +21,9 @@ jobs:
       - restore_cache:
           key: scala-library-dependencies-{{ checksum "build.sbt" }}
 
+      - run: sbt check
       - run: sbt test:compile
+
       - save_cache:
           paths: [ "~/.m2", "~/.ivy2", "~/.cache/coursier" ]
           key: scala-library-dependencies-{{ checksum "build.sbt" }}
