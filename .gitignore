@@ -1,20 +1,17 @@
-# Eclipse
-.classpath
-.project
-.settings/
+project/zecret
+project/travis-deploy-key
+project/secrets.tar.xz
+target
+test-output/
+.sbtopts
+project/.sbt
+test-output/
+.bloop
+.metals
+.idea
 
-# Intellij
-.idea/
-*.iml
-*.iws
-**/.attach_pid*
-
-# Mac
-.DS_Store
-
-# Maven
-log/
-target/
-
-# Custom
-*.log
+# if you are here to add your IDE's files please read this instead:
+# https://stackoverflow.com/questions/7335420/global-git-ignore#22885996
+website/node_modules
+website/build
+website/i18n/en.json

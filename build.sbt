@@ -5,11 +5,12 @@ val Specs2Version     = "4.1.0"
 val LogbackVersion    = "1.2.3"
 val ScalaLogVersion   = "3.9.2"
 val PureConfigVersion = "0.10.2"
-val ZioVersion        = "1.0-RC4"
 val ScalaTestVersion  = "3.0.5"
 val DoobieVersion     = "0.7.0-M5"
 val H2Version         = "1.4.199"
 val FlywayVersion     = "5.2.4"
+
+addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 
 lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
@@ -28,7 +29,8 @@ lazy val root = (project in file("."))
       "-explaintypes",
       "-unchecked",
       "-Xfuture",
-      "-encoding", "UTF-8",
+      "-encoding",
+      "UTF-8",
       "-language:higherKinds",
       "-language:existentials",
       "-Ypartial-unification",
@@ -44,40 +46,33 @@ lazy val root = (project in file("."))
       "-opt:l:inline"
     ),
     libraryDependencies ++= Seq(
-      "co.fs2"                      %% "fs2-core"                 % FS2Version,
-      "org.http4s"                  %% "http4s-blaze-server"      % Http4sVersion,
-      "org.http4s"                  %% "http4s-blaze-client"      % Http4sVersion,
-      "org.http4s"                  %% "http4s-circe"             % Http4sVersion,
-      "org.http4s"                  %% "http4s-dsl"               % Http4sVersion,
-      "io.circe"                    %% "circe-generic"            % CirceVersion,
-
-      "org.tpolecat"                %% "doobie-core"              % DoobieVersion,
-      "org.tpolecat"                %% "doobie-h2"                % DoobieVersion,
-      "org.tpolecat"                %% "doobie-hikari"            % DoobieVersion,
-
-      "com.h2database"              %  "h2"                       % H2Version,
-      "org.flywaydb"                %  "flyway-core"              % FlywayVersion,
-      "org.slf4j"                   %  "slf4j-log4j12"            % "1.7.26",
-
-      "com.typesafe.scala-logging"  %% "scala-logging"            % ScalaLogVersion,
-
-      "com.github.pureconfig"       %% "pureconfig"               % PureConfigVersion,
-      "com.github.pureconfig"       %% "pureconfig-cats-effect"   % PureConfigVersion,
-
-      "org.scalaz"                  %% "scalaz-zio"               % ZioVersion,
-      "org.scalaz"                  %% "scalaz-zio-interop-cats"  % ZioVersion,
-
-      "org.scalatest"               %% "scalatest"                % ScalaTestVersion % "test",
-
-      compilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4"),
-      compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0-M4")
+      "co.fs2"                     %% "fs2-core"               % FS2Version,
+      "org.http4s"                 %% "http4s-blaze-server"    % Http4sVersion,
+      "org.http4s"                 %% "http4s-blaze-client"    % Http4sVersion,
+      "org.http4s"                 %% "http4s-circe"           % Http4sVersion,
+      "org.http4s"                 %% "http4s-dsl"             % Http4sVersion,
+      "io.circe"                   %% "circe-generic"          % CirceVersion,
+      "org.tpolecat"               %% "doobie-core"            % DoobieVersion,
+      "org.tpolecat"               %% "doobie-h2"              % DoobieVersion,
+      "org.tpolecat"               %% "doobie-hikari"          % DoobieVersion,
+      "com.h2database"             % "h2"                      % H2Version,
+      "org.flywaydb"               % "flyway-core"             % FlywayVersion,
+      "org.slf4j"                  % "slf4j-log4j12"           % "1.7.26",
+      "com.typesafe.scala-logging" %% "scala-logging"          % ScalaLogVersion,
+      "com.github.pureconfig"      %% "pureconfig"             % PureConfigVersion,
+      "com.github.pureconfig"      %% "pureconfig-cats-effect" % PureConfigVersion,
+      "dev.zio"                    %% "zio"                    % "1.0.0-RC9-4",
+      "dev.zio"                    %% "zio-interop-cats"       % "1.3.1.0-RC3",
+      "org.scalatest"              %% "scalatest"              % ScalaTestVersion % "test",
+      compilerPlugin("org.spire-math" %% "kind-projector"     % "0.9.4"),
+      compilerPlugin("com.olegpy"     %% "better-monadic-for" % "0.3.0-M4")
     )
   )
 
 //release
 import ReleaseTransformations._
 import ReleasePlugin.autoImport._
-import sbtrelease.{Git, Utilities}
+import sbtrelease.{ Git, Utilities }
 import Utilities._
 
 releaseProcess := Seq(
@@ -99,7 +94,7 @@ releaseProcess := Seq(
 val mergeBranch = "master"
 
 val mergeReleaseVersion = ReleaseStep(action = st => {
-  val git = st.extract.get(releaseVcs).get.asInstanceOf[Git]
+  val git       = st.extract.get(releaseVcs).get.asInstanceOf[Git]
   val curBranch = (git.cmd("rev-parse", "--abbrev-ref", "HEAD") !!).trim
   st.log.info(s"####### current branch: $curBranch")
   git.cmd("checkout", mergeBranch) ! st.log

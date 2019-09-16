@@ -1,7 +1,7 @@
 package com.schuwalow.zio.todo.repository
 
-import com.schuwalow.zio.todo.{TodoItem, TodoItemPostForm, TodoItemPatchForm, TodoId}
-import scalaz.zio._
+import com.schuwalow.zio.todo.{ TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm }
+import zio._
 
 trait TodoRepository extends Serializable {
 
@@ -43,18 +43,18 @@ object TodoRepository extends Serializable {
 
     override def create(todoItemForm: TodoItemPostForm): ZIO[Any, Nothing, TodoItem] =
       for {
-        newId  <- counter.update(_ + 1) map TodoId
-        todo    = todoItemForm.asTodoItem(newId)
-        _      <- ref.update(store => store + (newId -> todo))
+        newId <- counter.update(_ + 1).map(TodoId)
+        todo  = todoItemForm.asTodoItem(newId)
+        _     <- ref.update(store => store + (newId -> todo))
       } yield todo
 
     override def update(id: TodoId, todoItemForm: TodoItemPatchForm): ZIO[Any, Nothing, Option[TodoItem]] =
       for {
         oldValue <- getById(id)
-        result   <- oldValue.fold[UIO[Option[TodoItem]]](ZIO.succeed(None)) { x =>
-                      val newValue = x.update(todoItemForm)
-                      ref.update(store => store + (newValue.id -> newValue)) *> ZIO.succeed(Some(newValue))
-                    }
+        result <- oldValue.fold[UIO[Option[TodoItem]]](ZIO.succeed(None)) { x =>
+                   val newValue = x.update(todoItemForm)
+                   ref.update(store => store + (newValue.id -> newValue)) *> ZIO.succeed(Some(newValue))
+                 }
       } yield result
 
   }

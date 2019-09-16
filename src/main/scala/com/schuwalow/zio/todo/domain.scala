@@ -15,12 +15,12 @@ final case class TodoItem(
 
   def update(form: TodoItemPatchForm): TodoItem =
     this.copy(
-      id    = this.id,
-      item  = item.copy(
-                title       = form.title.getOrElse(item.title),
-                completed   = form.completed.getOrElse(item.completed),
-                order       = form.order.orElse(item.order)
-              )
+      id = this.id,
+      item = item.copy(
+        title = form.title.getOrElse(item.title),
+        completed = form.completed.getOrElse(item.completed),
+        order = form.order.orElse(item.order)
+      )
     )
 }
 

@@ -3,8 +3,8 @@ import com.schuwalow.zio.todo._
 import com.schuwalow.zio.todo.repository.DoobieTodoRepository.SQL
 import doobie._
 import doobie.implicits._
-import scalaz.zio.interop.catz._
-import scalaz.zio.{Task, ZIO}
+import zio.interop.catz._
+import zio.{ Task, ZIO }
 import cats.implicits._
 import doobie.free.connection
 
@@ -16,8 +16,7 @@ trait DoobieTodoRepository extends TodoRepository {
     new TodoRepository.Service[Any] {
 
       override def getAll(): ZIO[Any, Nothing, List[TodoItem]] =
-        SQL
-          .getAll
+        SQL.getAll
           .to[List]
           .transact(xa)
           .orDie
@@ -38,9 +37,7 @@ trait DoobieTodoRepository extends TodoRepository {
           .orDie
 
       override def deleteAll: ZIO[Any, Nothing, Unit] =
-        SQL
-          .deleteAll
-          .run
+        SQL.deleteAll.run
           .transact(xa)
           .unit
           .orDie
@@ -55,12 +52,12 @@ trait DoobieTodoRepository extends TodoRepository {
 
       override def update(id: TodoId, todoItemForm: TodoItemPatchForm): ZIO[Any, Nothing, Option[TodoItem]] =
         (for {
-          oldItem    <- SQL.get(id).option
-          newItem     = oldItem.map(_.update(todoItemForm))
-          _          <- newItem.fold(connection.unit)(item => SQL.update(item).run.void)
+          oldItem <- SQL.get(id).option
+          newItem = oldItem.map(_.update(todoItemForm))
+          _       <- newItem.fold(connection.unit)(item => SQL.update(item).run.void)
         } yield newItem)
-        .transact(xa)
-        .orDie
+          .transact(xa)
+          .orDie
 
     }
 }
@@ -69,7 +66,7 @@ object DoobieTodoRepository {
 
   object SQL {
 
-    def create(todo: TodoPayload): Update0 =sql"""
+    def create(todo: TodoPayload): Update0 = sql"""
       INSERT INTO TODOS (TITLE, COMPLETED, ORDERING)
       VALUES (${todo.title}, ${todo.completed}, ${todo.order})
       """.update
@@ -82,11 +79,11 @@ object DoobieTodoRepository {
       SELECT * FROM TODOS
       """.query[TodoItem]
 
-    def delete(id: TodoId): Update0 =sql"""
+    def delete(id: TodoId): Update0 = sql"""
       DELETE from TODOS WHERE ID = ${id.value}
       """.update
 
-    val deleteAll: Update0 =sql"""
+    val deleteAll: Update0 = sql"""
       DELETE from TODOS
       """.update
 
