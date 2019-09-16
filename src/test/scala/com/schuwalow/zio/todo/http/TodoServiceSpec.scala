@@ -2,7 +2,7 @@ package com.schuwalow.zio.todo.http
 
 import com.schuwalow.zio.todo._
 import com.schuwalow.zio.todo.repository.TodoRepository
-import com.schuwalow.zio.todo.repository.TodoRepository.InMemoryTodoRepository
+import com.schuwalow.zio.todo.repository.InMemoryTodoRepository
 import io.circe.Decoder
 import io.circe.literal._
 import org.http4s.circe._

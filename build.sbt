@@ -1,6 +1,6 @@
-val Http4sVersion     = "0.20.1"
-val CirceVersion      = "0.12.0-M1"
-val DoobieVersion     = "0.7.0-M5"
+val Http4sVersion = "0.20.1"
+val CirceVersion  = "0.12.0-M1"
+val DoobieVersion = "0.7.0-M5"
 
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
