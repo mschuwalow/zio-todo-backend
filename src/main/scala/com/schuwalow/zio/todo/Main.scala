@@ -37,12 +37,12 @@ object Main extends ManagedApp {
         "/todos" -> TodoService.routes(s"${cfg.appConfig.baseUrl}/todos")
       ).orNotFound
 
-      program = ZManaged.environment[Environment] >>*
-        withDoobieRepository(cfg.dbConfig) >>*
-        withSlf4jLogManaged >>*
-        runHttp(httpApp, cfg.appConfig.port).toManaged_
+      _ <- ZManaged.environment[Environment] >>*
+            withDoobieRepository(cfg.dbConfig) >>*
+            withSlf4jLogManaged >>*
+            runHttp(httpApp, cfg.appConfig.port).toManaged_
 
-    } yield program)
+    } yield ())
       .foldM(err => putStrLn(s"Execution failed with: $err").const(1).toManaged_, _ => ZManaged.succeed(0))
 
   def withDoobieRepository[R <: Blocking](
