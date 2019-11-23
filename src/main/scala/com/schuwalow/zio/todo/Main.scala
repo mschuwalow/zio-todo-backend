@@ -23,8 +23,12 @@ import pureconfig.ConfigSource
 
 object Main extends ManagedApp {
 
-  type AppEnvironment = Clock with Console with Blocking with TodoRepository with Log
-  type AppTask[A]     = RIO[AppEnvironment, A]
+  type AppEnvironment = Clock
+    with Console
+    with Blocking
+    with TodoRepository
+    with Log
+  type AppTask[A] = RIO[AppEnvironment, A]
 
   override def run(args: List[String]): ZManaged[ZEnv, Nothing, Int] =
     (for {
@@ -40,9 +44,15 @@ object Main extends ManagedApp {
             runHttp(httpApp, cfg.appConfig.port).toManaged_
 
     } yield ())
-      .foldM(err => putStrLn(s"Execution failed with: $err").as(1).toManaged_, _ => ZManaged.succeed(0))
+      .foldM(
+        err => putStrLn(s"Execution failed with: $err").as(1).toManaged_,
+        _ => ZManaged.succeed(0)
+      )
 
-  def runHttp[R <: Clock](httpApp: HttpApp[TaskR[R, ?]], port: Int): ZIO[R, Throwable, Unit] = {
+  def runHttp[R <: Clock](
+    httpApp: HttpApp[TaskR[R, ?]],
+    port: Int
+  ): ZIO[R, Throwable, Unit] = {
     type Task[A] = RIO[R, A]
     ZIO.runtime[R].flatMap { implicit rts =>
       BlazeServerBuilder[Task]

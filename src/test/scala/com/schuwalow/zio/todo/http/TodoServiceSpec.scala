@@ -20,7 +20,8 @@ object TodoServiceSpec
       suite("TodoService")(
         testM("should create new todo items") {
           withEnv {
-            val req = request[TodoTask](Method.POST, "/").withEntity(json"""{"title": "Test"}""")
+            val req = request[TodoTask](Method.POST, "/")
+              .withEntity(json"""{"title": "Test"}""")
             checkRequest(
               app.run(req),
               Status.Created,
@@ -36,8 +37,10 @@ object TodoServiceSpec
         },
         testM("should list all todo items") {
           withEnv {
-            val setupReq = request[TodoTask](Method.POST, "/").withEntity(json"""{"title": "Test"}""")
-            val req      = request[TodoTask](Method.GET, "/")
+            val setupReq =
+              request[TodoTask](Method.POST, "/")
+                .withEntity(json"""{"title": "Test"}""")
+            val req = request[TodoTask](Method.GET, "/")
             checkRequest(
               app.run(setupReq) *> app.run(setupReq) *> app.run(req),
               Status.Ok,
@@ -50,14 +53,20 @@ object TodoServiceSpec
         },
         testM("should delete todo items by id") {
           withEnv {
-            val setupReq  = request[TodoTask](Method.POST, "/").withEntity(json"""{"title": "Test"}""")
-            val deleteReq = (id: Long) => request[TodoTask](Method.DELETE, s"/$id")
-            val req       = request[TodoTask](Method.GET, "/")
+            val setupReq =
+              request[TodoTask](Method.POST, "/")
+                .withEntity(json"""{"title": "Test"}""")
+            val deleteReq =
+              (id: Long) => request[TodoTask](Method.DELETE, s"/$id")
+            val req = request[TodoTask](Method.GET, "/")
             checkRequest(
               app
                 .run(setupReq)
                 .flatMap(resp => {
-                  implicit def circeJsonDecoder[A](implicit decoder: Decoder[A]): EntityDecoder[TodoTask, A] =
+                  implicit def circeJsonDecoder[A](
+                    implicit
+                    decoder: Decoder[A]
+                  ): EntityDecoder[TodoTask, A] =
                     jsonOf[TodoTask, A]
                   resp.as[TodoItemWithUri].map(_.id)
                 })
@@ -69,11 +78,14 @@ object TodoServiceSpec
         },
         testM("should delete all todo items") {
           withEnv {
-            val setupReq  = request[TodoTask](Method.POST, "/").withEntity(json"""{"title": "Test"}""")
+            val setupReq =
+              request[TodoTask](Method.POST, "/")
+                .withEntity(json"""{"title": "Test"}""")
             val deleteReq = request[TodoTask](Method.DELETE, "/")
             val req       = request[TodoTask](Method.GET, "/")
             checkRequest(
-              app.run(setupReq) *> app.run(setupReq) *> app.run(deleteReq) *> app.run(req),
+              app.run(setupReq) *> app.run(setupReq) *> app
+                .run(deleteReq) *> app.run(req),
               Status.Ok,
               Some(json"""[]""")
             )
@@ -81,15 +93,22 @@ object TodoServiceSpec
         },
         testM("should update todo items") {
           withEnv {
-            val setupReq = request[TodoTask](Method.POST, "/").withEntity(json"""{"title": "Test"}""")
+            val setupReq =
+              request[TodoTask](Method.POST, "/")
+                .withEntity(json"""{"title": "Test"}""")
             val updateReq =
-              (id: Long) => request[TodoTask](Method.PATCH, s"/$id").withEntity(json"""{"title": "Test1"}""")
+              (id: Long) =>
+                request[TodoTask](Method.PATCH, s"/$id")
+                  .withEntity(json"""{"title": "Test1"}""")
             val req = request[TodoTask](Method.GET, "/")
             checkRequest(
               app
                 .run(setupReq)
                 .flatMap(resp => {
-                  implicit def circeJsonDecoder[A](implicit decoder: Decoder[A]): EntityDecoder[TodoTask, A] =
+                  implicit def circeJsonDecoder[A](
+                    implicit
+                    decoder: Decoder[A]
+                  ): EntityDecoder[TodoTask, A] =
                     jsonOf[TodoTask, A]
                   resp.as[TodoItemWithUri].map(_.id)
                 })

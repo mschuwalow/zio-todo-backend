@@ -1,6 +1,11 @@
 package com.schuwalow.zio.todo.repository
 
-import com.schuwalow.zio.todo.{ TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm }
+import com.schuwalow.zio.todo.{
+  TodoId,
+  TodoItem,
+  TodoItemPatchForm,
+  TodoItemPostForm
+}
 import zio._
 
 trait TodoRepository extends Serializable {
@@ -23,6 +28,9 @@ object TodoRepository extends Serializable {
 
     def create(todoItemForm: TodoItemPostForm): ZIO[R, Nothing, TodoItem]
 
-    def update(id: TodoId, todoItemForm: TodoItemPatchForm): ZIO[R, Nothing, Option[TodoItem]]
+    def update(
+      id: TodoId,
+      todoItemForm: TodoItemPatchForm
+    ): ZIO[R, Nothing, Option[TodoItem]]
   }
 }

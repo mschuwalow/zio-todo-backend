@@ -1,10 +1,14 @@
-val Http4sVersion = "0.21.0-M5"
-val CirceVersion  = "0.12.3"
-val DoobieVersion = "0.8.6"
-val zioVersion    = "1.0.0-RC16"
+val Http4sVersion   = "0.21.0-M5"
+val CirceVersion    = "0.12.3"
+val DoobieVersion   = "0.8.6"
+val ZIOVersion      = "1.0.0-RC16"
+val SilencerVersion = "1.4.4"
 
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
-addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
+addCommandAlias(
+  "check",
+  "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck"
+)
 
 lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
@@ -15,31 +19,33 @@ lazy val root = (project in file("."))
     organization := "com.schuwalow",
     name := "zio-todo-backend",
     maintainer := "maxim.schuwalow@gmail.com",
-    licenses := Seq("MIT" -> url(s"https://github.com/mschuwalow/${name.value}/blob/v${version.value}/LICENSE")),
-    scalaVersion := "2.12.8",
+    licenses := Seq(
+      "MIT" -> url(
+        s"https://github.com/mschuwalow/${name.value}/blob/v${version.value}/LICENSE"
+      )
+    ),
+    scalaVersion := "2.13.1",
     testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
     scalacOptions := Seq(
       "-feature",
       "-deprecation",
       "-explaintypes",
       "-unchecked",
-      "-Xfuture",
       "-encoding",
       "UTF-8",
       "-language:higherKinds",
       "-language:existentials",
-      "-Ypartial-unification",
       "-Xfatal-warnings",
       "-Xlint:-infer-any,_",
       "-Ywarn-value-discard",
       "-Ywarn-numeric-widen",
       "-Ywarn-extra-implicit",
-      "-Ywarn-unused:_",
-      "-Ywarn-inaccessible",
-      "-Ywarn-nullary-override",
-      "-Ywarn-nullary-unit",
-      "-opt:l:inline"
-    ),
+      "-Ywarn-unused:_"
+    ) ++ (if (isSnapshot.value) Seq.empty
+          else
+            Seq(
+              "-opt:l:inline"
+            )),
     libraryDependencies ++= Seq(
       "org.http4s"            %% "http4s-blaze-server" % Http4sVersion,
       "org.http4s"            %% "http4s-circe"        % Http4sVersion,
@@ -50,19 +56,27 @@ lazy val root = (project in file("."))
       "org.tpolecat"          %% "doobie-core"         % DoobieVersion,
       "org.tpolecat"          %% "doobie-h2"           % DoobieVersion,
       "org.tpolecat"          %% "doobie-hikari"       % DoobieVersion,
+      "dev.zio"               %% "zio"                 % ZIOVersion,
+      "dev.zio"               %% "zio-test"            % ZIOVersion % "test",
+      "dev.zio"               %% "zio-test-sbt"        % ZIOVersion % "test",
+      "dev.zio"               %% "zio-interop-cats"    % "2.0.0.0-RC7",
+      "dev.zio"               %% "zio-macros-core"     % "0.5.0",
       "org.flywaydb"          % "flyway-core"          % "5.2.4",
       "com.h2database"        % "h2"                   % "1.4.199",
       "org.slf4j"             % "slf4j-log4j12"        % "1.7.26",
       "com.github.pureconfig" %% "pureconfig"          % "0.12.1",
-      "dev.zio"               %% "zio"                 % zioVersion,
-      "dev.zio"               %% "zio-test"            % zioVersion % "test",
-      "dev.zio"               %% "zio-test-sbt"        % zioVersion % "test",
-      "dev.zio"               %% "zio-interop-cats"    % "2.0.0.0-RC7",
-      "dev.zio"               %% "zio-macros-core"     % "0.5.0",
       "com.lihaoyi"           %% "sourcecode"          % "0.1.7",
-      compilerPlugin("org.spire-math" %% "kind-projector"     % "0.9.4"),
-      compilerPlugin("com.olegpy"     %% "better-monadic-for" % "0.3.0-M4"),
-      compilerPlugin(("org.scalamacros" % "paradise" % "2.1.1").cross(CrossVersion.full))
+      ("com.github.ghik" % "silencer-lib" % SilencerVersion % "provided")
+        .cross(CrossVersion.full),
+      // plugins
+      compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
+      compilerPlugin(
+        ("org.typelevel" % "kind-projector" % "0.11.0").cross(CrossVersion.full)
+      ),
+      compilerPlugin(
+        ("com.github.ghik" % "silencer-plugin" % SilencerVersion)
+          .cross(CrossVersion.full)
+      )
     )
   )
 

@@ -8,13 +8,11 @@ final case class TodoId(value: Long) extends AnyVal
 final case class TodoPayload(
   title: String,
   completed: Boolean,
-  order: Option[Int]
-)
+  order: Option[Int])
 
 final case class TodoItem(
   id: TodoId,
-  item: TodoPayload
-) {
+  item: TodoPayload) {
 
   def update(form: TodoItemPatchForm): TodoItem =
     this.copy(
@@ -29,8 +27,7 @@ final case class TodoItem(
 
 final case class TodoItemPostForm(
   title: String,
-  order: Option[Int] = None
-) {
+  order: Option[Int] = None) {
 
   def asTodoItem(id: TodoId): TodoItem =
     TodoItem(id, this.asTodoPayload)
@@ -47,8 +44,7 @@ object TodoItemPostForm {
 final case class TodoItemPatchForm(
   title: Option[String] = None,
   completed: Option[Boolean] = None,
-  order: Option[Int] = None
-)
+  order: Option[Int] = None)
 
 object TodoItemPatchForm {
   implicit val decoder: Decoder[TodoItemPatchForm] = deriveDecoder
