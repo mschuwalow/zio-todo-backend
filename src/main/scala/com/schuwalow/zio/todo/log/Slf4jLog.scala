@@ -17,9 +17,15 @@ object Slf4jLogger {
   object Global extends Slf4jLogger
 
   val unsafeInstance: UnsafeLogger =
-    new UnsafeLoggerImpl(slf4j.LoggerFactory.getLogger("ROOT"), _.value.split("/").last)
+    new UnsafeLoggerImpl(
+      slf4j.LoggerFactory.getLogger("ROOT"),
+      _.value.split("/").last
+    )
 
-  def fromSlf4j(inner: SLogger, shorten: sourcecode.File => String): Log.Service[Any] =
+  def fromSlf4j(
+    inner: SLogger,
+    shorten: sourcecode.File => String
+  ): Log.Service[Any] =
     new ServiceImpl(new UnsafeLoggerImpl(inner, shorten))
 
   val withSlf4jLogger = enrichWith[Log](Global)
@@ -27,8 +33,8 @@ object Slf4jLogger {
   final private[Slf4jLogger] class UnsafeLoggerImpl(
     private[this] val inner: SLogger,
     private[this] val showFile: sourcecode.File => String,
-    private[this] val context: String = "<?>"
-  ) extends UnsafeLogger { self =>
+    private[this] val context: String = "<?>")
+      extends UnsafeLogger { self =>
 
     def withContext(ctx: String): UnsafeLoggerImpl =
       new UnsafeLoggerImpl(
@@ -37,49 +43,115 @@ object Slf4jLogger {
         ctx
       )
 
-    def trace[A](a: => A)(implicit S: Show[A], line: sourcecode.Line, file: sourcecode.File) =
+    def trace[A](
+      a: => A
+    )(implicit
+      S: Show[A],
+      line: sourcecode.Line,
+      file: sourcecode.File
+    ) =
       if (inner.isTraceEnabled()) {
-        inner.trace(s"${showFile(file)}:${line.value} - $context - ${S.show(a)}")
+        inner.trace(
+          s"${showFile(file)}:${line.value} - $context - ${S.show(a)}"
+        )
       }
 
-    def debug[A](a: => A)(implicit S: Show[A], line: sourcecode.Line, file: sourcecode.File) =
+    def debug[A](
+      a: => A
+    )(implicit
+      S: Show[A],
+      line: sourcecode.Line,
+      file: sourcecode.File
+    ) =
       if (inner.isDebugEnabled()) {
-        inner.debug(s"${showFile(file)}:${line.value} - $context - ${S.show(a)}")
+        inner.debug(
+          s"${showFile(file)}:${line.value} - $context - ${S.show(a)}"
+        )
       }
 
-    def info[A](a: => A)(implicit S: Show[A], line: sourcecode.Line, file: sourcecode.File) =
+    def info[A](
+      a: => A
+    )(implicit
+      S: Show[A],
+      line: sourcecode.Line,
+      file: sourcecode.File
+    ) =
       if (inner.isInfoEnabled()) {
         inner.info(s"${showFile(file)}:${line.value} - $context - ${S.show(a)}")
       }
 
-    def warn[A](a: => A)(implicit S: Show[A], line: sourcecode.Line, file: sourcecode.File) =
+    def warn[A](
+      a: => A
+    )(implicit
+      S: Show[A],
+      line: sourcecode.Line,
+      file: sourcecode.File
+    ) =
       if (inner.isWarnEnabled()) {
         inner.warn(s"${showFile(file)}:${line.value} - $context - ${S.show(a)}")
       }
 
-    def error[A](a: => A)(implicit S: Show[A], line: sourcecode.Line, file: sourcecode.File) =
+    def error[A](
+      a: => A
+    )(implicit
+      S: Show[A],
+      line: sourcecode.Line,
+      file: sourcecode.File
+    ) =
       if (inner.isErrorEnabled()) {
-        inner.error(s"${showFile(file)}:${line.value} - $context - ${S.show(a)}")
+        inner.error(
+          s"${showFile(file)}:${line.value} - $context - ${S.show(a)}"
+        )
       }
   }
 
   final private[Slf4jLogger] class ServiceImpl(
-    private[this] val inner: UnsafeLogger
-  ) extends Log.Service[Any] {
+    private[this] val inner: UnsafeLogger)
+      extends Log.Service[Any] {
 
-    def trace[A](a: => A)(implicit S: Show[A], line: sourcecode.Line, file: sourcecode.File) =
+    def trace[A](
+      a: => A
+    )(implicit
+      S: Show[A],
+      line: sourcecode.Line,
+      file: sourcecode.File
+    ) =
       withFiberContext(_.trace(a))
 
-    def debug[A](a: => A)(implicit S: Show[A], line: sourcecode.Line, file: sourcecode.File) =
+    def debug[A](
+      a: => A
+    )(implicit
+      S: Show[A],
+      line: sourcecode.Line,
+      file: sourcecode.File
+    ) =
       withFiberContext(_.debug(a))
 
-    def info[A](a: => A)(implicit S: Show[A], line: sourcecode.Line, file: sourcecode.File) =
+    def info[A](
+      a: => A
+    )(implicit
+      S: Show[A],
+      line: sourcecode.Line,
+      file: sourcecode.File
+    ) =
       withFiberContext(_.info(a))
 
-    def warn[A](a: => A)(implicit S: Show[A], line: sourcecode.Line, file: sourcecode.File) =
+    def warn[A](
+      a: => A
+    )(implicit
+      S: Show[A],
+      line: sourcecode.Line,
+      file: sourcecode.File
+    ) =
       withFiberContext(_.warn(a))
 
-    def error[A](a: => A)(implicit S: Show[A], line: sourcecode.Line, file: sourcecode.File) =
+    def error[A](
+      a: => A
+    )(implicit
+      S: Show[A],
+      line: sourcecode.Line,
+      file: sourcecode.File
+    ) =
       withFiberContext(_.error(a))
 
     def withFiberContext[A](f: UnsafeLogger => A): ZIO[Any, Nothing, A] =

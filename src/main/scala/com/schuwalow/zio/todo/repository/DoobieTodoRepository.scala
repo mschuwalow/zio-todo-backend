@@ -59,7 +59,10 @@ final class DoobieTodoRepository(xa: Transactor[Task]) extends TodoRepository {
         .transact(xa)
         .orDie
 
-    def update(id: TodoId, todoItemForm: TodoItemPatchForm): ZIO[Any, Nothing, Option[TodoItem]] =
+    def update(
+      id: TodoId,
+      todoItemForm: TodoItemPatchForm
+    ): ZIO[Any, Nothing, Option[TodoItem]] =
       (for {
         oldItem <- SQL.get(id).option
         newItem = oldItem.map(_.update(todoItemForm))
@@ -103,9 +106,13 @@ object DoobieTodoRepository {
 
     enrichWithManaged[TodoRepository] {
       for {
-        rt         <- ZIO.runtime[Any].toManaged_
-        _          <- initDb(cfg).toManaged_
-        blockingEC <- ZManaged.environment[Blocking].flatMap(_.blocking.blockingExecutor.map(_.asEC).toManaged_)
+        rt <- ZIO.runtime[Any].toManaged_
+        _  <- initDb(cfg).toManaged_
+        blockingEC <- ZManaged
+                       .environment[Blocking]
+                       .flatMap(
+                         _.blocking.blockingExecutor.map(_.asEC).toManaged_
+                       )
         transactor <- mkTransactor(cfg, rt.Platform.executor.asEC, blockingEC)
       } yield new DoobieTodoRepository(transactor)
     }
@@ -135,11 +142,11 @@ object DoobieTodoRepository {
       """.update
 
     def update(todoItem: TodoItem): Update0 = sql"""
-        UPDATE TODOS SET
-        TITLE = ${todoItem.item.title},
-        COMPLETED = ${todoItem.item.completed},
-        ORDERING = ${todoItem.item.order}
-        WHERE ID = ${todoItem.id.value}
+      UPDATE TODOS SET
+      TITLE = ${todoItem.item.title},
+      COMPLETED = ${todoItem.item.completed},
+      ORDERING = ${todoItem.item.order}
+      WHERE ID = ${todoItem.id.value}
       """.update
   }
 

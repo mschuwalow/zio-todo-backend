@@ -8,14 +8,19 @@ import zio._
 
 object HTTPSpec {
 
-  def request[F[_]](method: Method, uri: String): Request[F] =
+  def request[F[_]](
+    method: Method,
+    uri: String
+  ): Request[F] =
     Request(method = method, uri = Uri.fromString(uri).toOption.get)
 
   def checkRequest[R, A](
     actual: RIO[R, Response[RIO[R, ?]]],
     expectedStatus: Status,
     expectedBody: Option[A]
-  )(implicit ev: EntityDecoder[RIO[R, ?], A]): RIO[R, TestResult] =
+  )(implicit
+    ev: EntityDecoder[RIO[R, ?], A]
+  ): RIO[R, TestResult] =
     for {
       actual <- actual
       bodyResult <- expectedBody
@@ -31,6 +36,7 @@ object HTTPSpec {
     actual: RIO[R, Response[RIO[R, ?]]],
     expectedStatus: Status,
     expectedBody: String
-  ): RIO[R, TestResult] = checkRequest(actual, expectedStatus, Some(expectedBody))
+  ): RIO[R, TestResult] =
+    checkRequest(actual, expectedStatus, Some(expectedBody))
 
 }
