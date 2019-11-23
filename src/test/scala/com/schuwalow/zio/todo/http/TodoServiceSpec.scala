@@ -10,6 +10,7 @@ import org.http4s.implicits._
 import org.http4s.{ Status, _ }
 import zio._
 import zio.interop.catz._
+import zio.macros.delegate._
 import com.schuwalow.zio.todo.http.TodoService.TodoItemWithUri
 
 class TodoServiceSpec extends HTTPSpec {
@@ -110,24 +111,15 @@ class TodoServiceSpec extends HTTPSpec {
 }
 
 object TodoServiceSpec extends DefaultRuntime {
-  type TodoTask[A] = TaskR[TodoRepository, A]
+  type TodoTask[A] = RIO[TodoRepository, A]
 
   val todoService = TodoService.routes[TodoRepository]("")
 
   val mkEnv: UIO[TodoRepository] =
-    for {
-      store   <- Ref.make(Map[TodoId, TodoItem]())
-      counter <- Ref.make(0L)
-      repo    = new InMemoryTodoRepository(store, counter)
-      env = new TodoRepository {
-        override val todoRepository: TodoRepository.Service[Any] = repo
-      }
-    } yield env
+    ZIO.succeed(Environment) @@
+      InMemoryTodoRepository.withInMemoryRepository
 
   def runWithEnv[E, A](task: ZIO[TodoRepository, E, A]): A =
     unsafeRun[E, A](mkEnv.flatMap(env => task.provide(env)))
-
-  // implicit def circeJsonDecoder[A](implicit decoder: Decoder[A]): EntityDecoder[TodoTask, A] = jsonOf[TodoTask, A]
-  // implicit def circeJsonEncoder[A](implicit encoder: Encoder[A]): EntityEncoder[TodoTask, A] = jsonEncoderOf[TodoTask, A]
 
 }
