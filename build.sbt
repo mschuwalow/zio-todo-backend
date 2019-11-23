@@ -1,6 +1,7 @@
 val Http4sVersion = "0.21.0-M5"
 val CirceVersion  = "0.12.3"
 val DoobieVersion = "0.8.6"
+val zioVersion    = "1.0.0-RC16"
 
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
@@ -16,6 +17,7 @@ lazy val root = (project in file("."))
     maintainer := "maxim.schuwalow@gmail.com",
     licenses := Seq("MIT" -> url(s"https://github.com/mschuwalow/${name.value}/blob/v${version.value}/LICENSE")),
     scalaVersion := "2.12.8",
+    testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
     scalacOptions := Seq(
       "-feature",
       "-deprecation",
@@ -52,11 +54,12 @@ lazy val root = (project in file("."))
       "com.h2database"        % "h2"                   % "1.4.199",
       "org.slf4j"             % "slf4j-log4j12"        % "1.7.26",
       "com.github.pureconfig" %% "pureconfig"          % "0.12.1",
-      "dev.zio"               %% "zio"                 % "1.0.0-RC16",
+      "dev.zio"               %% "zio"                 % zioVersion,
+      "dev.zio"               %% "zio-test"            % zioVersion % "test",
+      "dev.zio"               %% "zio-test-sbt"        % zioVersion % "test",
       "dev.zio"               %% "zio-interop-cats"    % "2.0.0.0-RC7",
       "dev.zio"               %% "zio-macros-core"     % "0.5.0",
       "com.lihaoyi"           %% "sourcecode"          % "0.1.7",
-      "org.scalatest"         %% "scalatest"           % "3.0.5" % "test",
       compilerPlugin("org.spire-math" %% "kind-projector"     % "0.9.4"),
       compilerPlugin("com.olegpy"     %% "better-monadic-for" % "0.3.0-M4"),
       compilerPlugin(("org.scalamacros" % "paradise" % "2.1.1").cross(CrossVersion.full))
