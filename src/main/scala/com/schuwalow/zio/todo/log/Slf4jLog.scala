@@ -159,7 +159,7 @@ object Slf4jLogger {
         ZIO.effectTotal(f(inner.withContext(s"<${desc.id}>")))
       }
 
-    def unsafeInstance =
+    val unsafeInstance =
       withFiberContext(identity)
   }
 
