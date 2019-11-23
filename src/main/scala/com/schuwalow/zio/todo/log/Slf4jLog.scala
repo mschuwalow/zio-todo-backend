@@ -2,7 +2,7 @@ package com.schuwalow.zio.todo.log
 
 import cats.Show
 import zio._
-import zio.delegate.Mix
+import zio.macros.delegate._
 
 import org.slf4j
 import org.slf4j.{ Logger => SLogger }
@@ -22,11 +22,7 @@ object Slf4jLogger {
   def fromSlf4j(inner: SLogger, shorten: sourcecode.File => String): Log.Service[Any] =
     new ServiceImpl(new UnsafeLoggerImpl(inner, shorten))
 
-  def withSlf4jLog[R](implicit ev: R Mix Log): ZIO[R, Nothing, R with Log] =
-    ZIO.environment[R].map(r => ev.mix(r, Global))
-
-  def withSlf4jLogManaged[R](implicit ev: R Mix Log): ZManaged[R, Nothing, R with Log] =
-    withSlf4jLog[R].toManaged_
+  val withSlf4jLogger = enrichWith[Log](Global)
 
   final private[Slf4jLogger] class UnsafeLoggerImpl(
     private[this] val inner: SLogger,

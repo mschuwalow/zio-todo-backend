@@ -7,7 +7,7 @@ import io.circe.{ Decoder, Encoder }
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
-import zio.TaskR
+import zio.RIO
 import zio.interop.catz._
 
 object TodoService {
@@ -35,8 +35,8 @@ object TodoService {
     implicit val decoder: Decoder[TodoItemWithUri] = deriveDecoder
   }
 
-  def routes[R <: TodoRepository](rootUri: String): HttpRoutes[TaskR[R, ?]] = {
-    type TodoTask[A] = TaskR[R, A]
+  def routes[R <: TodoRepository](rootUri: String): HttpRoutes[RIO[R, ?]] = {
+    type TodoTask[A] = RIO[R, A]
 
     val dsl: Http4sDsl[TodoTask] = Http4sDsl[TodoTask]
     import dsl._
