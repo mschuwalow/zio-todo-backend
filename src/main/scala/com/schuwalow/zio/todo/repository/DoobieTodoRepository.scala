@@ -76,19 +76,15 @@ final class DoobieTodoRepository(xa: Transactor[Task]) extends TodoRepository {
 object DoobieTodoRepository {
 
   def withDoobieTodoRepository(cfg: DBConfig) = {
-    val initDb: Task[Unit] =
-      ZIO.effect {
-        val fw = Flyway
-          .configure()
-          .dataSource(cfg.url, cfg.user, cfg.password)
-          .load()
-        fw.migrate()
-      }.unit
+    val initDb: Task[Unit] = Task {
+      Flyway
+        .configure()
+        .dataSource(cfg.url, cfg.user, cfg.password)
+        .load()
+        .migrate()
+    }.unit
 
-    def mkTransactor(
-      connectEC: ExecutionContext,
-      transactEC: ExecutionContext
-    ) =
+    def mkTransactor(blockingEC: ExecutionContext) =
       ZIO.runtime[Any].toManaged_.flatMap { implicit rt =>
         HikariTransactor
           .newHikariTransactor[Task](
@@ -96,22 +92,21 @@ object DoobieTodoRepository {
             cfg.url,
             cfg.user,
             cfg.password,
-            connectEC,
-            Blocker.liftExecutionContext(transactEC)
+            rt.Platform.executor.asEC,
+            Blocker.liftExecutionContext(blockingEC)
           )
           .toManaged
       }
 
     enrichWithManaged[TodoRepository] {
       for {
-        _         <- initDb.toManaged_
-        connectEC <- ZIO.runtime[Any].map(_.Platform.executor.asEC).toManaged_
-        transactEC <- ZIO
+        _ <- initDb.toManaged_
+        blockingEC <- ZIO
                        .accessM[Blocking](
                          _.blocking.blockingExecutor.map(_.asEC)
                        )
                        .toManaged_
-        transactor <- mkTransactor(connectEC, transactEC)
+        transactor <- mkTransactor(blockingEC)
       } yield new DoobieTodoRepository(transactor)
     }
   }
