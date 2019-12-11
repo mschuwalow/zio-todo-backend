@@ -15,7 +15,6 @@ import com.schuwalow.zio.todo.config._
 import doobie.hikari._
 import doobie.util.transactor.Transactor
 import org.flywaydb.core.Flyway
-import scala.concurrent.ExecutionContext
 import zio._
 import zio.blocking.Blocking
 import zio.interop.catz._
@@ -76,38 +75,37 @@ final class DoobieTodoRepository(xa: Transactor[Task]) extends TodoRepository {
 object DoobieTodoRepository {
 
   def withDoobieTodoRepository(cfg: DBConfig) = {
-    val initDb: Task[Unit] = Task {
-      Flyway
-        .configure()
-        .dataSource(cfg.url, cfg.user, cfg.password)
-        .load()
-        .migrate()
-    }.unit
+    val initDb: Task[Unit] =
+      Task {
+        Flyway
+          .configure()
+          .dataSource(cfg.url, cfg.user, cfg.password)
+          .load()
+          .migrate()
+      }.unit
 
-    def mkTransactor(blockingEC: ExecutionContext) =
-      ZIO.runtime[Any].toManaged_.flatMap { implicit rt =>
-        HikariTransactor
-          .newHikariTransactor[Task](
-            cfg.driver,
-            cfg.url,
-            cfg.user,
-            cfg.password,
-            rt.Platform.executor.asEC,
-            Blocker.liftExecutionContext(blockingEC)
-          )
-          .toManaged
+    val mkTransactor: ZManaged[Blocking, Throwable, HikariTransactor[Task]] =
+      ZIO.runtime[Blocking].toManaged_.flatMap { implicit rt =>
+        for {
+          transactEC <- rt.Environment.blocking.blockingExecutor
+                         .map(_.asEC)
+                         .toManaged_
+          connectEC = rt.Platform.executor.asEC
+          transactor <- HikariTransactor
+                         .newHikariTransactor[Task](
+                           cfg.driver,
+                           cfg.url,
+                           cfg.user,
+                           cfg.password,
+                           connectEC,
+                           Blocker.liftExecutionContext(transactEC)
+                         )
+                         .toManaged
+        } yield transactor
       }
 
     enrichWithManaged[TodoRepository] {
-      for {
-        _ <- initDb.toManaged_
-        blockingEC <- ZIO
-                       .accessM[Blocking](
-                         _.blocking.blockingExecutor.map(_.asEC)
-                       )
-                       .toManaged_
-        transactor <- mkTransactor(blockingEC)
-      } yield new DoobieTodoRepository(transactor)
+      initDb.toManaged_ *> mkTransactor.map(new DoobieTodoRepository(_))
     }
   }
 
