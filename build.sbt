@@ -10,7 +10,7 @@ addCommandAlias("check", "fixCheck; fmtCheck")
 addCommandAlias("fix", "all compile:scalafix test:scalafix")
 addCommandAlias(
   "fixCheck",
-  "; compile:scalafix --check ; test:scalafix --check"
+  "compile:scalafix --check; test:scalafix --check"
 )
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias(
@@ -18,7 +18,7 @@ addCommandAlias(
   "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck"
 )
 
-scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.3.1"
+// scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.3.1"
 
 lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
@@ -86,8 +86,8 @@ lazy val root = (project in file("."))
       compilerPlugin(
         ("com.github.ghik" % "silencer-plugin" % SilencerVersion)
           .cross(CrossVersion.full)
-      ),
-      compilerPlugin(scalafixSemanticdb)
+      )
+      //compilerPlugin(scalafixSemanticdb)
     )
   )
 

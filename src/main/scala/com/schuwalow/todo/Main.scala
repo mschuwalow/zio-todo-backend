@@ -13,6 +13,15 @@ import com.schuwalow.todo.http.TodoService
 import com.schuwalow.todo.log.Log
 import com.schuwalow.todo.log.Slf4jLogger.withSlf4jLogger
 import com.schuwalow.todo.repository.DoobieTodoRepository.withDoobieTodoRepository
+import cats.effect._
+import fs2.Stream.Compiler._
+import zio._
+import zio.blocking.Blocking
+import zio.clock.Clock
+import zio.console._
+import zio.interop.catz._
+import zio.macros.delegate._
+import pureconfig.ConfigSource
 
 object Main extends ManagedApp {
 

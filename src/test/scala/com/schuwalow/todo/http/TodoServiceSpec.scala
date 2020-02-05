@@ -3,9 +3,16 @@ package com.schuwalow.todo.http
 import TodoServiceSpecUtils._
 import com.schuwalow.todo.http.TodoService
 import com.schuwalow.todo.repository.{InMemoryTodoRepository, TodoRepository}
+import io.circe.Decoder
+import io.circe.literal._
 import org.http4s.circe._
 import org.http4s.implicits._
 import org.http4s.{Status, _}
+import zio._
+import zio.test._
+import zio.interop.catz._
+import zio.macros.delegate._
+import HTTPSpec._
 import com.schuwalow.todo.http.TodoService.TodoItemWithUri
 import com.schuwalow.todo.repository.InMemoryTodoRepository
 
