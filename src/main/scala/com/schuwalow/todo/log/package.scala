@@ -1,4 +1,4 @@
-package com.schuwalow.zio.todo
+package com.schuwalow.todo
 
 import cats.Show
 import zio._

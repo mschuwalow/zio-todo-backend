@@ -1,4 +1,4 @@
-package com.schuwalow.zio.todo
+package com.schuwalow.todo
 
 import io.circe.Decoder
 import io.circe.generic.semiauto._

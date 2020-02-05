@@ -1,12 +1,11 @@
-package com.schuwalow.zio.todo.log
+package com.schuwalow.todo.log
 
+import Log.UnsafeLogger
 import cats.Show
-import zio._
-import zio.macros.delegate._
-
 import org.slf4j
 import org.slf4j.{ Logger => SLogger }
-import Log.UnsafeLogger
+import zio._
+import zio.macros.delegate._
 
 trait Slf4jLogger extends Log {
   val log = new Slf4jLogger.ServiceImpl(Slf4jLogger.unsafeInstance)

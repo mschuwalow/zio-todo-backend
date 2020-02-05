@@ -1,19 +1,13 @@
-package com.schuwalow.zio.todo.http
+package com.schuwalow.todo.http
 
-import com.schuwalow.zio.todo.repository.TodoRepository
-import com.schuwalow.zio.todo.repository.InMemoryTodoRepository
-import io.circe.Decoder
-import io.circe.literal._
+import TodoServiceSpecUtils._
+import com.schuwalow.todo.http.TodoService
+import com.schuwalow.todo.repository.{InMemoryTodoRepository, TodoRepository}
 import org.http4s.circe._
 import org.http4s.implicits._
-import org.http4s.{ Status, _ }
-import zio._
-import zio.interop.catz._
-import zio.macros.delegate._
-import com.schuwalow.zio.todo.http.TodoService.TodoItemWithUri
-import zio.test._
-import TodoServiceSpecUtils._
-import HTTPSpec._
+import org.http4s.{Status, _}
+import com.schuwalow.todo.http.TodoService.TodoItemWithUri
+import com.schuwalow.todo.repository.InMemoryTodoRepository
 
 object TodoServiceSpec
     extends DefaultRunnableSpec(

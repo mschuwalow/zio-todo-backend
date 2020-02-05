@@ -1,4 +1,4 @@
-package com.schuwalow.zio.todo.log
+package com.schuwalow.todo.log
 
 import cats.Show
 import zio.ZIO

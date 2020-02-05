@@ -1,10 +1,10 @@
-package com.schuwalow.zio.todo.http
+package com.schuwalow.todo.http
 
 import org.http4s.{ EntityDecoder, Method, Request, Response, Status, Uri }
+import zio._
+import zio.interop.catz._
 import zio.test.Assertion._
 import zio.test._
-import zio.interop.catz._
-import zio._
 
 object HTTPSpec {
 
