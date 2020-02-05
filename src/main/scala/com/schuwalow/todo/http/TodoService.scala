@@ -1,18 +1,24 @@
 package com.schuwalow.todo.http
 
 import com.github.ghik.silencer.silent
-import com.schuwalow.todo.{TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm}
-import com.schuwalow.todo.repository.TodoRepository
+import com.github.ghik.silencer.silent
+import io.circe.generic.semiauto._
+import io.circe.{ Decoder, Encoder }
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
-import io.circe.generic.semiauto._
-import io.circe.{ Decoder, Encoder }
-import com.schuwalow.todo._
-import com.schuwalow.todo.repository._
 import zio._
 import zio.interop.catz._
-import com.github.ghik.silencer.silent
+
+import com.schuwalow.todo._
+import com.schuwalow.todo.repository.TodoRepository
+import com.schuwalow.todo.repository._
+import com.schuwalow.todo.{
+  TodoId,
+  TodoItem,
+  TodoItemPatchForm,
+  TodoItemPostForm
+}
 
 object TodoService {
 

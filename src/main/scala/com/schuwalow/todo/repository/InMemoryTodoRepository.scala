@@ -1,8 +1,14 @@
 package com.schuwalow.todo.repository
 
-import com.schuwalow.todo.{TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm}
 import zio._
 import zio.macros.delegate._
+
+import com.schuwalow.todo.{
+  TodoId,
+  TodoItem,
+  TodoItemPatchForm,
+  TodoItemPostForm
+}
 
 final class InMemoryTodoRepository(
   ref: Ref[Map[TodoId, TodoItem]],

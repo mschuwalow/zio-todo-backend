@@ -1,27 +1,28 @@
 package com.schuwalow.todo
 
-import com.schuwalow.todo.http.TodoService
-import com.schuwalow.todo.log.Log
-import com.schuwalow.todo.repository.TodoRepository
+import cats.effect._
+import fs2.Stream.Compiler._
 import org.http4s.HttpApp
 import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.CORS
-import com.schuwalow.todo.config._
-import com.schuwalow.todo.http.TodoService
-import com.schuwalow.todo.log.Log
-import com.schuwalow.todo.log.Slf4jLogger.withSlf4jLogger
-import com.schuwalow.todo.repository.DoobieTodoRepository.withDoobieTodoRepository
-import cats.effect._
-import fs2.Stream.Compiler._
+import pureconfig.ConfigSource
 import zio._
 import zio.blocking.Blocking
 import zio.clock.Clock
 import zio.console._
 import zio.interop.catz._
 import zio.macros.delegate._
-import pureconfig.ConfigSource
+
+import com.schuwalow.todo.config._
+import com.schuwalow.todo.http.TodoService
+import com.schuwalow.todo.http.TodoService
+import com.schuwalow.todo.log.Log
+import com.schuwalow.todo.log.Log
+import com.schuwalow.todo.log.Slf4jLogger.withSlf4jLogger
+import com.schuwalow.todo.repository.DoobieTodoRepository.withDoobieTodoRepository
+import com.schuwalow.todo.repository.TodoRepository
 
 object Main extends ManagedApp {
 

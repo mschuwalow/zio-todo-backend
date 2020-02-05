@@ -1,7 +1,13 @@
 package com.schuwalow.todo.repository
 
 import zio._
-import com.schuwalow.todo.{TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm}
+
+import com.schuwalow.todo.{
+  TodoId,
+  TodoItem,
+  TodoItemPatchForm,
+  TodoItemPostForm
+}
 
 trait TodoRepository extends Serializable {
 
