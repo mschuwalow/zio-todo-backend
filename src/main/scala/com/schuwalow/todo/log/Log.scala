@@ -1,7 +1,7 @@
-package com.schuwalow.zio.todo.log
+package com.schuwalow.todo.log
 
 import cats.Show
-import zio.ZIO
+import zio._
 
 trait Log extends Serializable {
   def log: Log.Service[Any]

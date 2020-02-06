@@ -1,7 +1,7 @@
-package com.schuwalow.zio.todo
+package com.schuwalow.todo
 
-import pureconfig.generic.semiauto._
 import pureconfig.ConfigConvert
+import pureconfig.generic.semiauto._
 
 object config {
 

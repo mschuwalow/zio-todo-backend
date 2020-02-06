@@ -1,25 +1,30 @@
-package com.schuwalow.zio.todo.repository
-import com.schuwalow.zio.todo._
-import com.schuwalow.zio.todo.repository.DoobieTodoRepository.SQL
-import doobie._
-import doobie.implicits._
-import zio.interop.catz._
+package com.schuwalow.todo.repository
+
 import cats.effect.Blocker
-import zio._
-import zio.macros.delegate._
 import cats.implicits._
+import doobie._
 import doobie.free.connection
-import doobie.util.transactor.Transactor
-import zio.blocking.Blocking
-import com.schuwalow.zio.todo.config._
 import doobie.hikari._
+import doobie.implicits._
+import doobie.util.transactor.Transactor
 import doobie.util.transactor.Transactor
 import org.flywaydb.core.Flyway
 import zio._
 import zio.blocking.Blocking
 import zio.interop.catz._
+import zio.macros.delegate._
+
+import com.schuwalow.todo.config.DBConfig
+import com.schuwalow.todo.{
+  TodoId,
+  TodoItem,
+  TodoItemPatchForm,
+  TodoItemPostForm,
+  TodoPayload
+}
 
 final class DoobieTodoRepository(xa: Transactor[Task]) extends TodoRepository {
+  import DoobieTodoRepository.SQL
 
   val todoRepository = new TodoRepository.Service[Any] {
 
