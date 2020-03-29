@@ -87,7 +87,7 @@ lazy val root = (project in file("."))
         ("com.github.ghik" % "silencer-plugin" % SilencerVersion)
           .cross(CrossVersion.full)
       ),
-      compilerPlugin(scalafixSemanticdb)
+      //compilerPlugin(scalafixSemanticdb)
     )
   )
 
