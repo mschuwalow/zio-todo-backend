@@ -5,9 +5,8 @@ import cats.Show
 import org.slf4j
 import org.slf4j.{ Logger => SLogger }
 import zio._
-import zio.macros.delegate._
 
-trait Slf4jLogger extends Log {
+trait Slf4jLogger {
   val log = new Slf4jLogger.ServiceImpl(Slf4jLogger.unsafeInstance)
 }
 
@@ -24,10 +23,10 @@ object Slf4jLogger {
   def fromSlf4j(
     inner: SLogger,
     shorten: sourcecode.File => String
-  ): Log.Service[Any] =
+  ): Log.Service =
     new ServiceImpl(new UnsafeLoggerImpl(inner, shorten))
 
-  val withSlf4jLogger = enrichWith[Log](Global)
+  val layer: ZLayer[Any, Nothing, Log] = ZLayer.succeed(Global.log)
 
   final private[Slf4jLogger] class UnsafeLoggerImpl(
     private[this] val inner: SLogger,
@@ -106,7 +105,7 @@ object Slf4jLogger {
 
   final private[Slf4jLogger] class ServiceImpl(
     private[this] val inner: UnsafeLogger)
-      extends Log.Service[Any] {
+      extends Log.Service {
 
     def trace[A](
       a: => A

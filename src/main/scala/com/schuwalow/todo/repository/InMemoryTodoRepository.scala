@@ -1,7 +1,6 @@
 package com.schuwalow.todo.repository
 
 import zio._
-import zio.macros.delegate._
 
 import com.schuwalow.todo.{
   TodoId,
@@ -12,10 +11,9 @@ import com.schuwalow.todo.{
 
 final class InMemoryTodoRepository(
   ref: Ref[Map[TodoId, TodoItem]],
-  counter: Ref[Long])
-    extends TodoRepository {
+  counter: Ref[Long]) {
 
-  val todoRepository = new TodoRepository.Service[Any] {
+  val todoRepository = new TodoRepository.Service {
 
     override def getAll(): ZIO[Any, Nothing, List[TodoItem]] =
       ref.get.map(_.values.toList)
@@ -33,7 +31,7 @@ final class InMemoryTodoRepository(
       todoItemForm: TodoItemPostForm
     ): ZIO[Any, Nothing, TodoItem] =
       for {
-        newId <- counter.update(_ + 1).map(TodoId)
+        newId <- counter.updateAndGet(_ + 1).map(TodoId)
         todo  = todoItemForm.asTodoItem(newId)
         _     <- ref.update(store => store + (newId -> todo))
       } yield todo
@@ -57,11 +55,11 @@ final class InMemoryTodoRepository(
 
 object InMemoryTodoRepository {
 
-  val withInMemoryRepository =
-    enrichWithM[TodoRepository] {
+  val layer: ZLayer[Any, Nothing, TodoRepository] =
+    ZLayer.fromEffect {
       for {
         ref     <- Ref.make(Map.empty[TodoId, TodoItem])
         counter <- Ref.make(0L)
-      } yield new InMemoryTodoRepository(ref, counter)
+      } yield new InMemoryTodoRepository(ref, counter).todoRepository
     }
 }

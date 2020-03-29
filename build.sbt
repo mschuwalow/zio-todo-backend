@@ -1,7 +1,7 @@
 val Http4sVersion   = "0.21.0-M5"
 val CirceVersion    = "0.12.3"
 val DoobieVersion   = "0.8.6"
-val ZIOVersion      = "1.0.0-RC16"
+val ZIOVersion      = "1.0.0-RC18-2"
 val SilencerVersion = "1.4.4"
 
 addCommandAlias("build", "prepare; testJVM")
@@ -69,8 +69,7 @@ lazy val root = (project in file("."))
       "dev.zio"               %% "zio"                 % ZIOVersion,
       "dev.zio"               %% "zio-test"            % ZIOVersion % "test",
       "dev.zio"               %% "zio-test-sbt"        % ZIOVersion % "test",
-      "dev.zio"               %% "zio-interop-cats"    % "2.0.0.0-RC7",
-      "dev.zio"               %% "zio-macros-core"     % "0.5.0",
+      "dev.zio"               %% "zio-interop-cats"    % "2.0.0.0-RC12",
       "org.flywaydb"          % "flyway-core"          % "5.2.4",
       "com.h2database"        % "h2"                   % "1.4.199",
       "org.slf4j"             % "slf4j-log4j12"        % "1.7.26",

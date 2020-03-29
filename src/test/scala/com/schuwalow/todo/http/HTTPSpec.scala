@@ -25,11 +25,11 @@ object HTTPSpec {
       actual <- actual
       bodyResult <- expectedBody
                      .fold[RIO[R, TestResult]](
-                       assertM(actual.bodyAsText.compile.toVector, isEmpty)
+                       assertM(actual.bodyAsText.compile.toVector)(isEmpty)
                      )(
-                       expected => assertM(actual.as[A], equalTo(expected))
+                       expected => assertM(actual.as[A])(equalTo(expected))
                      )
-      statusResult = assert(actual.status, equalTo(expectedStatus))
+      statusResult = assert(actual.status)(equalTo(expectedStatus))
     } yield bodyResult && statusResult
 
   def checkRequestRaw[R, A](
