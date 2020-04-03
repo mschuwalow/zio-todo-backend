@@ -13,19 +13,19 @@ object TodoRepository extends Serializable {
 
   trait Service extends Serializable {
 
-    def getAll(): ZIO[Any, Nothing, List[TodoItem]]
+    def getAll(): UIO[List[TodoItem]]
 
-    def getById(id: TodoId): ZIO[Any, Nothing, Option[TodoItem]]
+    def getById(id: TodoId): UIO[Option[TodoItem]]
 
-    def delete(id: TodoId): ZIO[Any, Nothing, Unit]
+    def delete(id: TodoId): UIO[Unit]
 
-    def deleteAll: ZIO[Any, Nothing, Unit]
+    def deleteAll: UIO[Unit]
 
-    def create(todoItemForm: TodoItemPostForm): ZIO[Any, Nothing, TodoItem]
+    def create(todoItemForm: TodoItemPostForm): UIO[TodoItem]
 
     def update(
       id: TodoId,
       todoItemForm: TodoItemPatchForm
-    ): ZIO[Any, Nothing, Option[TodoItem]]
+    ): UIO[Option[TodoItem]]
   }
 }

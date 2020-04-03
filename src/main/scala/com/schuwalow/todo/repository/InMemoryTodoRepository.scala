@@ -15,21 +15,19 @@ final class InMemoryTodoRepository(
 
   val todoRepository = new TodoRepository.Service {
 
-    override def getAll(): ZIO[Any, Nothing, List[TodoItem]] =
+    override def getAll(): UIO[List[TodoItem]] =
       ref.get.map(_.values.toList)
 
-    override def getById(id: TodoId): ZIO[Any, Nothing, Option[TodoItem]] =
+    override def getById(id: TodoId): UIO[Option[TodoItem]] =
       ref.get.map(_.get(id))
 
-    override def delete(id: TodoId): ZIO[Any, Nothing, Unit] =
+    override def delete(id: TodoId): UIO[Unit] =
       ref.update(store => store - id).unit
 
-    override def deleteAll: ZIO[Any, Nothing, Unit] =
+    override def deleteAll: UIO[Unit] =
       ref.update(_.empty).unit
 
-    override def create(
-      todoItemForm: TodoItemPostForm
-    ): ZIO[Any, Nothing, TodoItem] =
+    override def create(todoItemForm: TodoItemPostForm): UIO[TodoItem] =
       for {
         newId <- counter.updateAndGet(_ + 1).map(TodoId)
         todo  = todoItemForm.asTodoItem(newId)
@@ -39,7 +37,7 @@ final class InMemoryTodoRepository(
     override def update(
       id: TodoId,
       todoItemForm: TodoItemPatchForm
-    ): ZIO[Any, Nothing, Option[TodoItem]] =
+    ): UIO[Option[TodoItem]] =
       for {
         oldValue <- getById(id)
         result <- oldValue.fold[UIO[Option[TodoItem]]](ZIO.succeed(None)) { x =>

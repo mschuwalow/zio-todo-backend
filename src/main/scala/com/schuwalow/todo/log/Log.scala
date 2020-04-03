@@ -51,36 +51,36 @@ object Log {
     )(implicit
       line: sourcecode.Line,
       file: sourcecode.File
-    ): ZIO[Any, Nothing, Unit]
+    ): UIO[Unit]
 
     def debug[A: Show](
       a: => A
     )(implicit
       line: sourcecode.Line,
       file: sourcecode.File
-    ): ZIO[Any, Nothing, Unit]
+    ): UIO[Unit]
 
     def info[A: Show](
       a: => A
     )(implicit
       line: sourcecode.Line,
       file: sourcecode.File
-    ): ZIO[Any, Nothing, Unit]
+    ): UIO[Unit]
 
     def warn[A: Show](
       a: => A
     )(implicit
       line: sourcecode.Line,
       file: sourcecode.File
-    ): ZIO[Any, Nothing, Unit]
+    ): UIO[Unit]
 
     def error[A: Show](
       a: => A
     )(implicit
       line: sourcecode.Line,
       file: sourcecode.File
-    ): ZIO[Any, Nothing, Unit]
+    ): UIO[Unit]
 
-    val unsafeInstance: ZIO[Any, Nothing, UnsafeLogger]
+    val unsafeInstance: UIO[UnsafeLogger]
   }
 }

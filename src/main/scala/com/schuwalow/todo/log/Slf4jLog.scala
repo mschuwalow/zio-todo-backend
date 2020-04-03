@@ -152,7 +152,7 @@ object Slf4jLogger {
     ) =
       withFiberContext(_.error(a))
 
-    def withFiberContext[A](f: UnsafeLogger => A): ZIO[Any, Nothing, A] =
+    def withFiberContext[A](f: UnsafeLogger => A): UIO[A] =
       ZIO.descriptorWith { desc =>
         ZIO.effectTotal(f(inner.withContext(s"<${desc.id}>")))
       }

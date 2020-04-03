@@ -26,20 +26,20 @@ final class DoobieTodoRepository(xa: Transactor[Task]) {
 
   val todoRepository = new TodoRepository.Service {
 
-    def getAll(): ZIO[Any, Nothing, List[TodoItem]] =
+    def getAll(): UIO[List[TodoItem]] =
       SQL.getAll
         .to[List]
         .transact(xa)
         .orDie
 
-    def getById(id: TodoId): ZIO[Any, Nothing, Option[TodoItem]] =
+    def getById(id: TodoId): UIO[Option[TodoItem]] =
       SQL
         .get(id)
         .option
         .transact(xa)
         .orDie
 
-    def delete(id: TodoId): ZIO[Any, Nothing, Unit] =
+    def delete(id: TodoId): UIO[Unit] =
       SQL
         .delete(id)
         .run
@@ -47,13 +47,13 @@ final class DoobieTodoRepository(xa: Transactor[Task]) {
         .unit
         .orDie
 
-    def deleteAll: ZIO[Any, Nothing, Unit] =
+    def deleteAll: UIO[Unit] =
       SQL.deleteAll.run
         .transact(xa)
         .unit
         .orDie
 
-    def create(todoItemForm: TodoItemPostForm): ZIO[Any, Nothing, TodoItem] =
+    def create(todoItemForm: TodoItemPostForm): UIO[TodoItem] =
       SQL
         .create(todoItemForm.asTodoPayload)
         .withUniqueGeneratedKeys[Long]("ID")
@@ -64,7 +64,7 @@ final class DoobieTodoRepository(xa: Transactor[Task]) {
     def update(
       id: TodoId,
       todoItemForm: TodoItemPatchForm
-    ): ZIO[Any, Nothing, Option[TodoItem]] =
+    ): UIO[Option[TodoItem]] =
       (for {
         oldItem <- SQL.get(id).option
         newItem = oldItem.map(_.update(todoItemForm))
