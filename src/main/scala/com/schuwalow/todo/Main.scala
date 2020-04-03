@@ -13,15 +13,12 @@ import zio.blocking.Blocking
 import zio.clock.Clock
 import zio.console._
 import zio.interop.catz._
-import zio.macros.delegate._
 
 import com.schuwalow.todo.config._
 import com.schuwalow.todo.http.TodoService
-import com.schuwalow.todo.http.TodoService
 import com.schuwalow.todo.log.Log
-import com.schuwalow.todo.log.Log
-import com.schuwalow.todo.log.Slf4jLogger.withSlf4jLogger
-import com.schuwalow.todo.repository.DoobieTodoRepository.withDoobieTodoRepository
+import com.schuwalow.todo.log.Slf4jLogger
+import com.schuwalow.todo.repository.DoobieTodoRepository
 import com.schuwalow.todo.repository.TodoRepository
 
 object Main extends ManagedApp {
@@ -41,10 +38,11 @@ object Main extends ManagedApp {
         "/todos" -> TodoService.routes(s"${cfg.appConfig.baseUrl}/todos")
       ).orNotFound
 
-      _ <- ZIO.environment[ZEnv] @@
-            withSlf4jLogger @@
-            withDoobieTodoRepository(cfg.dbConfig) >>>
-            runHttp(httpApp, cfg.appConfig.port).toManaged_
+      _ <- runHttp(httpApp, cfg.appConfig.port)
+            .provideSomeLayer[ZEnv](
+              DoobieTodoRepository.layer(cfg.dbConfig) ++ Slf4jLogger.layer
+            )
+            .toManaged_
 
     } yield ())
       .foldM(
@@ -53,7 +51,7 @@ object Main extends ManagedApp {
       )
 
   def runHttp[R <: Clock](
-    httpApp: HttpApp[TaskR[R, ?]],
+    httpApp: HttpApp[RIO[R, ?]],
     port: Int
   ): ZIO[R, Throwable, Unit] = {
     type Task[A] = RIO[R, A]

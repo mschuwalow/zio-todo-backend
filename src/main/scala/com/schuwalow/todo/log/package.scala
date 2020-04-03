@@ -3,7 +3,8 @@ package com.schuwalow.todo
 import cats.Show
 import zio._
 
-package object log extends Log.Service[Log] {
+package object log {
+  type Log = Has[Log.Service]
 
   def trace[A: Show](
     a: => A
@@ -11,7 +12,7 @@ package object log extends Log.Service[Log] {
     line: sourcecode.Line,
     file: sourcecode.File
   ) =
-    ZIO.accessM(_.log.trace(a))
+    ZIO.accessM[Log](_.get.trace(a))
 
   def debug[A: Show](
     a: => A
@@ -19,7 +20,7 @@ package object log extends Log.Service[Log] {
     line: sourcecode.Line,
     file: sourcecode.File
   ) =
-    ZIO.accessM(_.log.debug(a))
+    ZIO.accessM[Log](_.get.debug(a))
 
   def info[A: Show](
     a: => A
@@ -27,7 +28,7 @@ package object log extends Log.Service[Log] {
     line: sourcecode.Line,
     file: sourcecode.File
   ) =
-    ZIO.accessM(_.log.info(a))
+    ZIO.accessM[Log](_.get.info(a))
 
   def warn[A: Show](
     a: => A
@@ -35,7 +36,7 @@ package object log extends Log.Service[Log] {
     line: sourcecode.Line,
     file: sourcecode.File
   ) =
-    ZIO.accessM(_.log.warn(a))
+    ZIO.accessM[Log](_.get.warn(a))
 
   def error[A: Show](
     a: => A
@@ -43,8 +44,8 @@ package object log extends Log.Service[Log] {
     line: sourcecode.Line,
     file: sourcecode.File
   ) =
-    ZIO.accessM(_.log.error(a))
+    ZIO.accessM[Log](_.get.error(a))
 
   val unsafeInstance =
-    ZIO.accessM(_.log.unsafeInstance)
+    ZIO.accessM[Log](_.get.unsafeInstance)
 }

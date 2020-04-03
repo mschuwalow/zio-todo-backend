@@ -9,29 +9,23 @@ import com.schuwalow.todo.{
   TodoItemPostForm
 }
 
-trait TodoRepository extends Serializable {
-
-  val todoRepository: TodoRepository.Service[Any]
-
-}
-
 object TodoRepository extends Serializable {
 
-  trait Service[R] extends Serializable {
+  trait Service extends Serializable {
 
-    def getAll(): ZIO[R, Nothing, List[TodoItem]]
+    def getAll(): UIO[List[TodoItem]]
 
-    def getById(id: TodoId): ZIO[R, Nothing, Option[TodoItem]]
+    def getById(id: TodoId): UIO[Option[TodoItem]]
 
-    def delete(id: TodoId): ZIO[R, Nothing, Unit]
+    def delete(id: TodoId): UIO[Unit]
 
-    def deleteAll: ZIO[R, Nothing, Unit]
+    def deleteAll: UIO[Unit]
 
-    def create(todoItemForm: TodoItemPostForm): ZIO[R, Nothing, TodoItem]
+    def create(todoItemForm: TodoItemPostForm): UIO[TodoItem]
 
     def update(
       id: TodoId,
       todoItemForm: TodoItemPatchForm
-    ): ZIO[R, Nothing, Option[TodoItem]]
+    ): UIO[Option[TodoItem]]
   }
 }

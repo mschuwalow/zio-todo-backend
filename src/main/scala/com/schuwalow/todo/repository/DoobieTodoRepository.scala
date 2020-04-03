@@ -7,12 +7,10 @@ import doobie.free.connection
 import doobie.hikari._
 import doobie.implicits._
 import doobie.util.transactor.Transactor
-import doobie.util.transactor.Transactor
 import org.flywaydb.core.Flyway
 import zio._
 import zio.blocking.Blocking
 import zio.interop.catz._
-import zio.macros.delegate._
 
 import com.schuwalow.todo.config.DBConfig
 import com.schuwalow.todo.{
@@ -23,25 +21,25 @@ import com.schuwalow.todo.{
   TodoPayload
 }
 
-final class DoobieTodoRepository(xa: Transactor[Task]) extends TodoRepository {
+final class DoobieTodoRepository(xa: Transactor[Task]) {
   import DoobieTodoRepository.SQL
 
-  val todoRepository = new TodoRepository.Service[Any] {
+  val todoRepository = new TodoRepository.Service {
 
-    def getAll(): ZIO[Any, Nothing, List[TodoItem]] =
+    def getAll(): UIO[List[TodoItem]] =
       SQL.getAll
         .to[List]
         .transact(xa)
         .orDie
 
-    def getById(id: TodoId): ZIO[Any, Nothing, Option[TodoItem]] =
+    def getById(id: TodoId): UIO[Option[TodoItem]] =
       SQL
         .get(id)
         .option
         .transact(xa)
         .orDie
 
-    def delete(id: TodoId): ZIO[Any, Nothing, Unit] =
+    def delete(id: TodoId): UIO[Unit] =
       SQL
         .delete(id)
         .run
@@ -49,13 +47,13 @@ final class DoobieTodoRepository(xa: Transactor[Task]) extends TodoRepository {
         .unit
         .orDie
 
-    def deleteAll: ZIO[Any, Nothing, Unit] =
+    def deleteAll: UIO[Unit] =
       SQL.deleteAll.run
         .transact(xa)
         .unit
         .orDie
 
-    def create(todoItemForm: TodoItemPostForm): ZIO[Any, Nothing, TodoItem] =
+    def create(todoItemForm: TodoItemPostForm): UIO[TodoItem] =
       SQL
         .create(todoItemForm.asTodoPayload)
         .withUniqueGeneratedKeys[Long]("ID")
@@ -66,7 +64,7 @@ final class DoobieTodoRepository(xa: Transactor[Task]) extends TodoRepository {
     def update(
       id: TodoId,
       todoItemForm: TodoItemPatchForm
-    ): ZIO[Any, Nothing, Option[TodoItem]] =
+    ): UIO[Option[TodoItem]] =
       (for {
         oldItem <- SQL.get(id).option
         newItem = oldItem.map(_.update(todoItemForm))
@@ -79,7 +77,7 @@ final class DoobieTodoRepository(xa: Transactor[Task]) extends TodoRepository {
 
 object DoobieTodoRepository {
 
-  def withDoobieTodoRepository(cfg: DBConfig) = {
+  def layer(cfg: DBConfig): ZLayer[Blocking, Throwable, TodoRepository] = {
     val initDb: Task[Unit] =
       Task {
         Flyway
@@ -92,10 +90,13 @@ object DoobieTodoRepository {
     val mkTransactor: ZManaged[Blocking, Throwable, HikariTransactor[Task]] =
       ZIO.runtime[Blocking].toManaged_.flatMap { implicit rt =>
         for {
-          transactEC <- rt.Environment.blocking.blockingExecutor
-                         .map(_.asEC)
-                         .toManaged_
-          connectEC = rt.Platform.executor.asEC
+          transactEC <- Managed.succeed(
+                         rt.environment
+                           .get[Blocking.Service]
+                           .blockingExecutor
+                           .asEC
+                       )
+          connectEC = rt.platform.executor.asEC
           transactor <- HikariTransactor
                          .newHikariTransactor[Task](
                            cfg.driver,
@@ -109,8 +110,10 @@ object DoobieTodoRepository {
         } yield transactor
       }
 
-    enrichWithManaged[TodoRepository] {
-      initDb.toManaged_ *> mkTransactor.map(new DoobieTodoRepository(_))
+    ZLayer.fromManaged {
+      initDb.toManaged_ *> mkTransactor.map(
+        new DoobieTodoRepository(_).todoRepository
+      )
     }
   }
 

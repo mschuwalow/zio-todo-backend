@@ -2,31 +2,28 @@ package com.schuwalow.todo
 
 import zio._
 
-package object repository extends TodoRepository.Service[TodoRepository] {
+package object repository {
+  type TodoRepository = Has[TodoRepository.Service]
 
-  override def create(
-    todoItemForm: TodoItemPostForm
-  ): ZIO[TodoRepository, Nothing, TodoItem] =
-    ZIO.accessM(_.todoRepository.create(todoItemForm))
+  def create(todoItemForm: TodoItemPostForm): URIO[TodoRepository, TodoItem] =
+    ZIO.accessM(_.get.create(todoItemForm))
 
-  override def getById(
-    id: TodoId
-  ): ZIO[TodoRepository, Nothing, Option[TodoItem]] =
-    ZIO.accessM(_.todoRepository.getById(id))
+  def getById(id: TodoId): URIO[TodoRepository, Option[TodoItem]] =
+    ZIO.accessM(_.get.getById(id))
 
-  override def getAll: ZIO[TodoRepository, Nothing, List[TodoItem]] =
-    ZIO.accessM(_.todoRepository.getAll)
+  def getAll: URIO[TodoRepository, List[TodoItem]] =
+    ZIO.accessM(_.get.getAll)
 
-  override def delete(id: TodoId): ZIO[TodoRepository, Nothing, Unit] =
-    ZIO.accessM(_.todoRepository.delete(id))
+  def delete(id: TodoId): URIO[TodoRepository, Unit] =
+    ZIO.accessM(_.get.delete(id))
 
-  override def deleteAll: ZIO[TodoRepository, Nothing, Unit] =
-    ZIO.accessM(_.todoRepository.deleteAll)
+  def deleteAll: URIO[TodoRepository, Unit] =
+    ZIO.accessM(_.get.deleteAll)
 
-  override def update(
+  def update(
     id: TodoId,
     todoItemForm: TodoItemPatchForm
-  ): ZIO[TodoRepository, Nothing, Option[TodoItem]] =
-    ZIO.accessM(_.todoRepository.update(id, todoItemForm))
+  ): URIO[TodoRepository, Option[TodoItem]] =
+    ZIO.accessM(_.get.update(id, todoItemForm))
 
 }

@@ -3,10 +3,6 @@ package com.schuwalow.todo.log
 import cats.Show
 import zio._
 
-trait Log extends Serializable {
-  def log: Log.Service[Any]
-}
-
 object Log {
 
   trait UnsafeLogger {
@@ -48,43 +44,43 @@ object Log {
     ): Unit
   }
 
-  trait Service[R] extends Serializable {
+  trait Service extends Serializable {
 
     def trace[A: Show](
       a: => A
     )(implicit
       line: sourcecode.Line,
       file: sourcecode.File
-    ): ZIO[R, Nothing, Unit]
+    ): UIO[Unit]
 
     def debug[A: Show](
       a: => A
     )(implicit
       line: sourcecode.Line,
       file: sourcecode.File
-    ): ZIO[R, Nothing, Unit]
+    ): UIO[Unit]
 
     def info[A: Show](
       a: => A
     )(implicit
       line: sourcecode.Line,
       file: sourcecode.File
-    ): ZIO[R, Nothing, Unit]
+    ): UIO[Unit]
 
     def warn[A: Show](
       a: => A
     )(implicit
       line: sourcecode.Line,
       file: sourcecode.File
-    ): ZIO[R, Nothing, Unit]
+    ): UIO[Unit]
 
     def error[A: Show](
       a: => A
     )(implicit
       line: sourcecode.Line,
       file: sourcecode.File
-    ): ZIO[R, Nothing, Unit]
+    ): UIO[Unit]
 
-    val unsafeInstance: ZIO[R, Nothing, UnsafeLogger]
+    val unsafeInstance: UIO[UnsafeLogger]
   }
 }
