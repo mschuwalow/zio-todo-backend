@@ -13,11 +13,11 @@ import zio.blocking.Blocking
 import zio.clock.Clock
 import zio.console._
 import zio.interop.catz._
+import zio.logging.Logging.Logging
+import zio.logging.slf4j.Slf4jLogger
 
 import com.schuwalow.todo.config._
 import com.schuwalow.todo.http.TodoService
-import com.schuwalow.todo.log.Log
-import com.schuwalow.todo.log.Slf4jLogger
 import com.schuwalow.todo.repository.DoobieTodoRepository
 import com.schuwalow.todo.repository.TodoRepository
 
@@ -27,7 +27,7 @@ object Main extends ManagedApp {
     with Console
     with Blocking
     with TodoRepository
-    with Log
+    with Logging
   type AppTask[A] = RIO[AppEnvironment, A]
 
   override def run(args: List[String]): ZManaged[ZEnv, Nothing, Int] =
@@ -40,7 +40,8 @@ object Main extends ManagedApp {
 
       _ <- runHttp(httpApp, cfg.appConfig.port)
             .provideSomeLayer[ZEnv](
-              DoobieTodoRepository.layer(cfg.dbConfig) ++ Slf4jLogger.layer
+              DoobieTodoRepository.layer(cfg.dbConfig) ++ Slf4jLogger
+                .makeWithName(getClass.getPackageName)((_, msg) => msg)
             )
             .toManaged_
 

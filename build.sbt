@@ -1,9 +1,10 @@
-val Http4sVersion   = "0.21.0-M5"
-val CirceVersion    = "0.12.3"
-val DoobieVersion   = "0.8.6"
-val ZIOVersion      = "1.0.0-RC18-2"
-val SilencerVersion = "1.4.4"
-val Log4j2Version   = "2.13.1"
+val Http4sVersion     = "0.21.0-M5"
+val CirceVersion      = "0.12.3"
+val DoobieVersion     = "0.8.6"
+val ZIOVersion        = "1.0.0-RC18-2"
+val ZIOLoggingVersion = "0.2.6"
+val SilencerVersion   = "1.4.4"
+val Log4j2Version     = "2.13.1"
 
 addCommandAlias("build", "prepare; testJVM")
 addCommandAlias("prepare", "fix; fmt")
@@ -71,6 +72,8 @@ lazy val root = (project in file("."))
       "dev.zio"                  %% "zio-test"            % ZIOVersion % "test",
       "dev.zio"                  %% "zio-test-sbt"        % ZIOVersion % "test",
       "dev.zio"                  %% "zio-interop-cats"    % "2.0.0.0-RC12",
+      "dev.zio"                  %% "zio-logging"         % ZIOLoggingVersion,
+      "dev.zio"                  %% "zio-logging-slf4j"   % ZIOLoggingVersion,
       "org.flywaydb"             % "flyway-core"          % "5.2.4",
       "com.h2database"           % "h2"                   % "1.4.199",
       "org.apache.logging.log4j" % "log4j-api"            % Log4j2Version,
