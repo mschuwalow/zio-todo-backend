@@ -8,6 +8,7 @@
 
     <Loggers>
         <Logger name="com.schuwalow.todo" level="info"/>
+        <Logger name="com.schuwalow.todo.repository" level="info"/>
 
         <Root level="info">
             <AppenderRef ref="Console" />

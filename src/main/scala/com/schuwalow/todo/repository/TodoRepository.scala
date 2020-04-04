@@ -1,6 +1,8 @@
 package com.schuwalow.todo.repository
 
 import zio._
+import zio.logging.Logging
+import zio.logging.Logging.Logging
 
 import com.schuwalow.todo.{
   TodoId,
@@ -28,4 +30,40 @@ object TodoRepository extends Serializable {
       todoItemForm: TodoItemPatchForm
     ): UIO[Option[TodoItem]]
   }
+
+  def withTracing[RIn, ROut <: TodoRepository with Logging, E](
+    layer: ZLayer[RIn, E, ROut]
+  ): ZLayer[RIn, E, ROut] =
+    layer >>> ZLayer.fromFunctionMany[ROut, ROut] { env =>
+      val logging                = env.get[Logging.Service]
+      def trace(call: => String) = logging.logger.trace(s"TodoRepository.$call")
+
+      env.update[TodoRepository.Service] { service =>
+        new Service {
+          def getAll(): UIO[List[TodoItem]] =
+            trace("getAll()") *> service.getAll()
+
+          def getById(id: TodoId): UIO[Option[TodoItem]] =
+            trace(s"getById($id)") *> service.getById(id)
+
+          def delete(id: TodoId): UIO[Unit] =
+            trace(s"delete($id)") *> service.delete(id)
+
+          def deleteAll: UIO[Unit] =
+            trace("deleteAll") *> service.deleteAll
+
+          def create(todoItemForm: TodoItemPostForm): UIO[TodoItem] =
+            trace(s"create($todoItemForm)") *> service.create(todoItemForm)
+
+          def update(
+            id: TodoId,
+            todoItemForm: TodoItemPatchForm
+          ): UIO[Option[TodoItem]] =
+            trace(s"update($id, $todoItemForm)") *> service.update(
+              id,
+              todoItemForm
+            )
+        }
+      }
+    }
 }

@@ -13,6 +13,7 @@ import zio.interop.catz._
 
 import com.schuwalow.todo.config._
 import com.schuwalow.todo.http.TodoService
+import com.schuwalow.todo.repository.TodoRepository
 
 object Main extends App {
   type AppTask[A] = RIO[Layers.AppEnv with Clock, A]
@@ -31,7 +32,9 @@ object Main extends App {
         _ <- runHttp(httpApp, appCfg.port)
       } yield 0
 
-    prog.provideSomeLayer[ZEnv](Layers.live.appLayer).orDie
+    prog
+      .provideSomeLayer[ZEnv](TodoRepository.withTracing(Layers.live.appLayer))
+      .orDie
   }
 
   def runHttp[R <: Clock](
