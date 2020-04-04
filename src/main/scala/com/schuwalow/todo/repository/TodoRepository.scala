@@ -40,7 +40,7 @@ object TodoRepository extends Serializable {
 
       env.update[TodoRepository.Service] { service =>
         new Service {
-          def getAll: UIO[List[TodoItem]] =
+          val getAll: UIO[List[TodoItem]] =
             trace("getAll") *> service.getAll
 
           def getById(id: TodoId): UIO[Option[TodoItem]] =
@@ -49,7 +49,7 @@ object TodoRepository extends Serializable {
           def delete(id: TodoId): UIO[Unit] =
             trace(s"delete($id)") *> service.delete(id)
 
-          def deleteAll: UIO[Unit] =
+          val deleteAll: UIO[Unit] =
             trace("deleteAll") *> service.deleteAll
 
           def create(todoItemForm: TodoItemPostForm): UIO[TodoItem] =
