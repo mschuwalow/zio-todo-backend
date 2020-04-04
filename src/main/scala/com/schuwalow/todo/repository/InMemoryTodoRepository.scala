@@ -15,7 +15,7 @@ final class InMemoryTodoRepository(
 
   val todoRepository = new TodoRepository.Service {
 
-    override def getAll(): UIO[List[TodoItem]] =
+    override def getAll: UIO[List[TodoItem]] =
       ref.get.map(_.values.toList)
 
     override def getById(id: TodoId): UIO[Option[TodoItem]] =

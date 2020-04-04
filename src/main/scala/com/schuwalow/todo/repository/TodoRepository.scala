@@ -15,7 +15,7 @@ object TodoRepository extends Serializable {
 
   trait Service extends Serializable {
 
-    def getAll(): UIO[List[TodoItem]]
+    def getAll: UIO[List[TodoItem]]
 
     def getById(id: TodoId): UIO[Option[TodoItem]]
 
@@ -40,8 +40,8 @@ object TodoRepository extends Serializable {
 
       env.update[TodoRepository.Service] { service =>
         new Service {
-          def getAll(): UIO[List[TodoItem]] =
-            trace("getAll()") *> service.getAll()
+          def getAll: UIO[List[TodoItem]] =
+            trace("getAll") *> service.getAll
 
           def getById(id: TodoId): UIO[Option[TodoItem]] =
             trace(s"getById($id)") *> service.getById(id)

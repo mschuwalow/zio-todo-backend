@@ -27,7 +27,7 @@ final class DoobieTodoRepository(xa: Transactor[Task]) {
 
   val todoRepository = new TodoRepository.Service {
 
-    def getAll(): UIO[List[TodoItem]] =
+    def getAll: UIO[List[TodoItem]] =
       SQL.getAll
         .to[List]
         .transact(xa)
