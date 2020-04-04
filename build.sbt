@@ -6,7 +6,7 @@ val ZIOLoggingVersion = "0.2.6"
 val SilencerVersion   = "1.4.4"
 val Log4j2Version     = "2.13.1"
 
-addCommandAlias("build", "prepare; testJVM")
+addCommandAlias("build", "prepare; test")
 addCommandAlias("prepare", "fix; fmt")
 addCommandAlias("check", "fixCheck; fmtCheck")
 addCommandAlias("fix", "all compile:scalafix test:scalafix")
