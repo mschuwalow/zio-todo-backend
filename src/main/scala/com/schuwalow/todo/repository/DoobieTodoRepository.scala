@@ -13,6 +13,7 @@ import zio.blocking.Blocking
 import zio.interop.catz._
 
 import com.schuwalow.todo.config.DBConfig
+import com.schuwalow.todo.config.DbConfigProvider
 import com.schuwalow.todo.{
   TodoId,
   TodoItem,
@@ -77,8 +78,9 @@ final class DoobieTodoRepository(xa: Transactor[Task]) {
 
 object DoobieTodoRepository {
 
-  def layer(cfg: DBConfig): ZLayer[Blocking, Throwable, TodoRepository] = {
-    val initDb: Task[Unit] =
+  def layer
+    : ZLayer[Blocking with DbConfigProvider, Throwable, TodoRepository] = {
+    def initDb(cfg: DBConfig): Task[Unit] =
       Task {
         Flyway
           .configure()
@@ -87,7 +89,9 @@ object DoobieTodoRepository {
           .migrate()
       }.unit
 
-    val mkTransactor: ZManaged[Blocking, Throwable, HikariTransactor[Task]] =
+    def mkTransactor(
+      cfg: DBConfig
+    ): ZManaged[Blocking, Throwable, HikariTransactor[Task]] =
       ZIO.runtime[Blocking].toManaged_.flatMap { implicit rt =>
         for {
           transactEC <- Managed.succeed(
@@ -111,9 +115,11 @@ object DoobieTodoRepository {
       }
 
     ZLayer.fromManaged {
-      initDb.toManaged_ *> mkTransactor.map(
-        new DoobieTodoRepository(_).todoRepository
-      )
+      for {
+        cfg        <- ZIO.access[DbConfigProvider](_.get).toManaged_
+        _          <- initDb(cfg).toManaged_
+        transactor <- mkTransactor(cfg)
+      } yield new DoobieTodoRepository(transactor).todoRepository
     }
   }
 
