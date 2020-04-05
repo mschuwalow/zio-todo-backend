@@ -1,10 +1,12 @@
-val Http4sVersion   = "0.21.0-M5"
-val CirceVersion    = "0.12.3"
-val DoobieVersion   = "0.8.6"
-val ZIOVersion      = "1.0.0-RC18-2"
-val SilencerVersion = "1.4.4"
+val Http4sVersion     = "0.21.0-M5"
+val CirceVersion      = "0.12.3"
+val DoobieVersion     = "0.8.6"
+val ZIOVersion        = "1.0.0-RC18-2"
+val ZIOLoggingVersion = "0.2.6"
+val SilencerVersion   = "1.4.4"
+val Log4j2Version     = "2.13.1"
 
-addCommandAlias("build", "prepare; testJVM")
+addCommandAlias("build", "prepare; test")
 addCommandAlias("prepare", "fix; fmt")
 addCommandAlias("check", "fixCheck; fmtCheck")
 addCommandAlias("fix", "all compile:scalafix test:scalafix")
@@ -57,24 +59,28 @@ lazy val root = (project in file("."))
               "-opt:l:inline"
             )),
     libraryDependencies ++= Seq(
-      "org.http4s"            %% "http4s-blaze-server" % Http4sVersion,
-      "org.http4s"            %% "http4s-circe"        % Http4sVersion,
-      "org.http4s"            %% "http4s-dsl"          % Http4sVersion,
-      "io.circe"              %% "circe-core"          % CirceVersion,
-      "io.circe"              %% "circe-generic"       % CirceVersion,
-      "io.circe"              %% "circe-literal"       % CirceVersion % "test",
-      "org.tpolecat"          %% "doobie-core"         % DoobieVersion,
-      "org.tpolecat"          %% "doobie-h2"           % DoobieVersion,
-      "org.tpolecat"          %% "doobie-hikari"       % DoobieVersion,
-      "dev.zio"               %% "zio"                 % ZIOVersion,
-      "dev.zio"               %% "zio-test"            % ZIOVersion % "test",
-      "dev.zio"               %% "zio-test-sbt"        % ZIOVersion % "test",
-      "dev.zio"               %% "zio-interop-cats"    % "2.0.0.0-RC12",
-      "org.flywaydb"          % "flyway-core"          % "5.2.4",
-      "com.h2database"        % "h2"                   % "1.4.199",
-      "org.slf4j"             % "slf4j-log4j12"        % "1.7.26",
-      "com.github.pureconfig" %% "pureconfig"          % "0.12.1",
-      "com.lihaoyi"           %% "sourcecode"          % "0.1.7",
+      "org.http4s"               %% "http4s-blaze-server" % Http4sVersion,
+      "org.http4s"               %% "http4s-circe"        % Http4sVersion,
+      "org.http4s"               %% "http4s-dsl"          % Http4sVersion,
+      "io.circe"                 %% "circe-core"          % CirceVersion,
+      "io.circe"                 %% "circe-generic"       % CirceVersion,
+      "io.circe"                 %% "circe-literal"       % CirceVersion % "test",
+      "org.tpolecat"             %% "doobie-core"         % DoobieVersion,
+      "org.tpolecat"             %% "doobie-h2"           % DoobieVersion,
+      "org.tpolecat"             %% "doobie-hikari"       % DoobieVersion,
+      "dev.zio"                  %% "zio"                 % ZIOVersion,
+      "dev.zio"                  %% "zio-test"            % ZIOVersion % "test",
+      "dev.zio"                  %% "zio-test-sbt"        % ZIOVersion % "test",
+      "dev.zio"                  %% "zio-interop-cats"    % "2.0.0.0-RC12",
+      "dev.zio"                  %% "zio-logging"         % ZIOLoggingVersion,
+      "dev.zio"                  %% "zio-logging-slf4j"   % ZIOLoggingVersion,
+      "org.flywaydb"             % "flyway-core"          % "5.2.4",
+      "com.h2database"           % "h2"                   % "1.4.199",
+      "org.apache.logging.log4j" % "log4j-api"            % Log4j2Version,
+      "org.apache.logging.log4j" % "log4j-core"           % Log4j2Version,
+      "org.apache.logging.log4j" % "log4j-slf4j-impl"     % Log4j2Version,
+      "com.github.pureconfig"    %% "pureconfig"          % "0.12.1",
+      "com.lihaoyi"              %% "sourcecode"          % "0.1.7",
       ("com.github.ghik" % "silencer-lib" % SilencerVersion % "provided")
         .cross(CrossVersion.full),
       // plugins
