@@ -11,7 +11,7 @@ import com.schuwalow.todo.config.DbConfigProvider
 import com.schuwalow.todo.repository.DoobieTodoRepository
 import com.schuwalow.todo.repository.TodoRepository
 
-object Layers {
+object layers {
 
   type Layer0Env =
     ConfigProvider with Logging with Blocking
