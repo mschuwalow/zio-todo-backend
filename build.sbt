@@ -95,21 +95,21 @@ lazy val root = (project in file("."))
   import sbtrelease.{ Git, Utilities }
   import Utilities._
 
+  val releaseBranch = "develop"
   val mergeBranch = "master"
 
   val mergeReleaseVersion = ReleaseStep(action = st => {
-    val git       = st.extract.get(releaseVcs).get.asInstanceOf[Git]
-    val curBranch = (git.cmd("rev-parse", "--abbrev-ref", "HEAD") !!).trim
-    st.log.info(s"####### current branch: $curBranch")
+    val git = st.extract.get(releaseVcs).get.asInstanceOf[Git]
+    st.log.info(s"####### current branch: $releaseBranch")
     git.cmd("checkout", mergeBranch) ! st.log
     st.log.info(s"####### pull $mergeBranch")
     git.cmd("pull") ! st.log
     st.log.info(s"####### merge")
-    git.cmd("merge", curBranch, "--no-ff", "--no-edit") ! st.log
+    git.cmd("merge", releaseBranch, "--no-ff", "--no-edit") ! st.log
     st.log.info(s"####### push")
     git.cmd("push", "origin", s"$mergeBranch:$mergeBranch") ! st.log
-    st.log.info(s"####### checkout $curBranch")
-    git.cmd("checkout", curBranch) ! st.log
+    st.log.info(s"####### checkout $releaseBranch")
+    git.cmd("checkout", releaseBranch) ! st.log
     st
   })
 
