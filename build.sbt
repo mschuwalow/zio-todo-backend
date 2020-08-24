@@ -12,7 +12,7 @@ addCommandAlias(
   "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck"
 )
 
-scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.3.1"
+scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.5.4"
 
 lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
@@ -57,9 +57,9 @@ lazy val root = (project in file("."))
       "io.circe"                 %% "circe-core"          % "0.12.3",
       "io.circe"                 %% "circe-generic"       % "0.12.3",
       "io.circe"                 %% "circe-literal"       % "0.12.3" % "test",
-      "org.tpolecat"             %% "doobie-core"         % "0.8.6",
-      "org.tpolecat"             %% "doobie-h2"           % "0.8.6",
-      "org.tpolecat"             %% "doobie-hikari"       % "0.8.6",
+      "org.tpolecat"             %% "doobie-core"         % "0.8.8",
+      "org.tpolecat"             %% "doobie-h2"           % "0.8.8",
+      "org.tpolecat"             %% "doobie-hikari"       % "0.8.8",
       "dev.zio"                  %% "zio"                 % "1.0.0-RC18-2",
       "dev.zio"                  %% "zio-test"            % "1.0.0-RC18-2" % "test",
       "dev.zio"                  %% "zio-test-sbt"        % "1.0.0-RC18-2" % "test",
@@ -67,12 +67,12 @@ lazy val root = (project in file("."))
       "dev.zio"                  %% "zio-logging"         % "0.2.6",
       "dev.zio"                  %% "zio-logging-slf4j"   % "0.2.6",
       "org.flywaydb"             % "flyway-core"          % "6.5.5",
-      "com.h2database"           % "h2"                   % "1.4.199",
-      "org.apache.logging.log4j" % "log4j-api"            % "2.13.1",
-      "org.apache.logging.log4j" % "log4j-core"           % "2.13.1",
-      "org.apache.logging.log4j" % "log4j-slf4j-impl"     % "2.13.1",
+      "com.h2database"           % "h2"                   % "1.4.200",
+      "org.apache.logging.log4j" % "log4j-api"            % "2.13.3",
+      "org.apache.logging.log4j" % "log4j-core"           % "2.13.3",
+      "org.apache.logging.log4j" % "log4j-slf4j-impl"     % "2.13.3",
       "com.github.pureconfig"    %% "pureconfig"          % "0.12.1",
-      "com.lihaoyi"              %% "sourcecode"          % "0.1.7",
+      "com.lihaoyi"              %% "sourcecode"          % "0.1.9",
       ("com.github.ghik" % "silencer-lib" % "1.6.0" % "provided")
         .cross(CrossVersion.full),
       // plugins
