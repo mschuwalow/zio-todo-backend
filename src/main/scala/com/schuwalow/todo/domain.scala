@@ -34,7 +34,6 @@ final case class TodoItemPostForm(
 
   def asTodoPayload: TodoPayload =
     TodoPayload(title, false, order)
-
 }
 
 object TodoItemPostForm {

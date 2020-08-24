@@ -124,7 +124,6 @@ object DoobieTodoRepository {
   }
 
   object SQL {
-
     def create(todo: TodoPayload): Update0 = sql"""
       INSERT INTO TODOS (TITLE, COMPLETED, ORDERING)
       VALUES (${todo.title}, ${todo.completed}, ${todo.order})
@@ -154,5 +153,4 @@ object DoobieTodoRepository {
       WHERE ID = ${todoItem.id.value}
       """.update
   }
-
 }
