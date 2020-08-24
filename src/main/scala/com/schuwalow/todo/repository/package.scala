@@ -25,5 +25,4 @@ package object repository {
     todoItemForm: TodoItemPatchForm
   ): URIO[TodoRepository, Option[TodoItem]] =
     ZIO.accessM(_.get.update(id, todoItemForm))
-
 }

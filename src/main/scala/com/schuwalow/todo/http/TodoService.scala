@@ -66,7 +66,6 @@ object TodoService {
       jsonEncoderOf[TodoTask, A]
 
     HttpRoutes.of[TodoTask] {
-
       case GET -> Root / LongVar(id) =>
         for {
           todo <- getById(TodoId(id))

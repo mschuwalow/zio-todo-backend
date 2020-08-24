@@ -38,5 +38,4 @@ object HTTPSpec {
     expectedBody: String
   ): RIO[R, TestResult] =
     checkRequest(actual, expectedStatus, Some(expectedBody))
-
 }

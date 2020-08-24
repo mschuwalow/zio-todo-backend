@@ -14,7 +14,6 @@ import com.schuwalow.todo.{
 object TodoRepository extends Serializable {
 
   trait Service extends Serializable {
-
     def getAll: UIO[List[TodoItem]]
 
     def getById(id: TodoId): UIO[Option[TodoItem]]
