@@ -7,9 +7,9 @@ import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.CORS
-import zio.{ ExitCode => ZExitCode, _ }
 import zio.clock.Clock
 import zio.interop.catz._
+import zio.{ ExitCode => ZExitCode, _ }
 
 import com.schuwalow.todo.config._
 import com.schuwalow.todo.http.TodoService

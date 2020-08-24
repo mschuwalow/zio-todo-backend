@@ -1,8 +1,8 @@
 package com.schuwalow.todo.repository
 
 import zio._
-import zio.logging.log
 import zio.logging.Logging
+import zio.logging.log
 
 import com.schuwalow.todo.{
   TodoId,
