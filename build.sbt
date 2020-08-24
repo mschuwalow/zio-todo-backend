@@ -73,7 +73,7 @@ lazy val root = (project in file("."))
       "org.apache.logging.log4j" % "log4j-slf4j-impl"     % "2.13.3",
       "com.github.pureconfig"    %% "pureconfig"          % "0.12.1",
       "com.lihaoyi"              %% "sourcecode"          % "0.1.9",
-      ("com.github.ghik" % "silencer-lib" % "1.4.4" % "provided")
+      ("com.github.ghik" % "silencer-lib" % "1.6.0" % "provided")
         .cross(CrossVersion.full),
       // plugins
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
@@ -81,7 +81,7 @@ lazy val root = (project in file("."))
         ("org.typelevel" % "kind-projector" % "0.11.0").cross(CrossVersion.full)
       ),
       compilerPlugin(
-        ("com.github.ghik" % "silencer-plugin" % "1.4.4")
+        ("com.github.ghik" % "silencer-plugin" % "1.6.0")
           .cross(CrossVersion.full)
       ),
       compilerPlugin(scalafixSemanticdb)
