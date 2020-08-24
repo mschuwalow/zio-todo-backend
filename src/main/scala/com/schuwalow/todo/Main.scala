@@ -7,9 +7,9 @@ import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.CORS
-import zio._
 import zio.clock.Clock
 import zio.interop.catz._
+import zio.{ ExitCode => ZExitCode, _ }
 
 import com.schuwalow.todo.config._
 import com.schuwalow.todo.http.TodoService
@@ -18,7 +18,7 @@ import com.schuwalow.todo.repository.TodoRepository
 object Main extends App {
   type AppTask[A] = RIO[layers.AppEnv with Clock, A]
 
-  override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] = {
+  override def run(args: List[String]): ZIO[ZEnv, Nothing, ZExitCode] = {
     val prog =
       for {
         cfg    <- ZIO.access[ConfigProvider](_.get)
@@ -30,7 +30,7 @@ object Main extends App {
         ).orNotFound
 
         _ <- runHttp(httpApp, appCfg.port)
-      } yield 0
+      } yield ZExitCode.success
 
     prog
       .provideSomeLayer[ZEnv](TodoRepository.withTracing(layers.live.appLayer))

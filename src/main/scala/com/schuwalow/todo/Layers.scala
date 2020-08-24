@@ -2,7 +2,7 @@ package com.schuwalow.todo
 
 import zio.ZLayer
 import zio.blocking.Blocking
-import zio.logging.Logging.Logging
+import zio.logging.Logging
 import zio.logging.slf4j.Slf4jLogger
 
 import com.schuwalow.todo.config.AppConfigProvider
