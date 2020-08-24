@@ -51,9 +51,9 @@ lazy val root = (project in file("."))
               "-opt:l:inline"
             )),
     libraryDependencies ++= Seq(
-      "org.http4s"               %% "http4s-blaze-server" % "0.21.0-M5",
-      "org.http4s"               %% "http4s-circe"        % "0.21.0-M5",
-      "org.http4s"               %% "http4s-dsl"          % "0.21.0-M5",
+      "org.http4s"               %% "http4s-blaze-server" % "0.21.7",
+      "org.http4s"               %% "http4s-circe"        % "0.21.7",
+      "org.http4s"               %% "http4s-dsl"          % "0.21.7",
       "io.circe"                 %% "circe-core"          % "0.12.3",
       "io.circe"                 %% "circe-generic"       % "0.12.3",
       "io.circe"                 %% "circe-literal"       % "0.12.3" % "test",
