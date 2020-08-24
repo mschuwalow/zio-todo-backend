@@ -16,7 +16,7 @@ import com.schuwalow.todo.http.TodoService
 import com.schuwalow.todo.repository.TodoRepository
 
 object Main extends App {
-  type AppTask[A] = RIO[Layers.AppEnv with Clock, A]
+  type AppTask[A] = RIO[layers.AppEnv with Clock, A]
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] = {
     val prog =
@@ -33,7 +33,7 @@ object Main extends App {
       } yield 0
 
     prog
-      .provideSomeLayer[ZEnv](TodoRepository.withTracing(Layers.live.appLayer))
+      .provideSomeLayer[ZEnv](TodoRepository.withTracing(layers.live.appLayer))
       .orDie
   }
 
@@ -43,7 +43,8 @@ object Main extends App {
   ): ZIO[R, Throwable, Unit] = {
     type Task[A] = RIO[R, A]
     ZIO.runtime[R].flatMap { implicit rts =>
-      BlazeServerBuilder[Task]
+      BlazeServerBuilder
+        .apply[Task](rts.platform.executor.asEC)
         .bindHttp(port, "0.0.0.0")
         .withHttpApp(CORS(httpApp))
         .serve
