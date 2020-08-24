@@ -96,7 +96,7 @@ lazy val root = (project in file("."))
   import Utilities._
 
   val releaseBranch = "develop"
-  val mergeBranch = "master"
+  val mergeBranch   = "master"
 
   val mergeReleaseVersion = ReleaseStep(action = st => {
     val git = st.extract.get(releaseVcs).get.asInstanceOf[Git]
