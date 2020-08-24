@@ -1,11 +1,3 @@
-val Http4sVersion     = "0.21.0-M5"
-val CirceVersion      = "0.12.3"
-val DoobieVersion     = "0.8.6"
-val ZIOVersion        = "1.0.0-RC18-2"
-val ZIOLoggingVersion = "0.2.6"
-val SilencerVersion   = "1.4.4"
-val Log4j2Version     = "2.13.1"
-
 addCommandAlias("build", "prepare; test")
 addCommandAlias("prepare", "fix; fmt")
 addCommandAlias("check", "fixCheck; fmtCheck")
@@ -59,29 +51,29 @@ lazy val root = (project in file("."))
               "-opt:l:inline"
             )),
     libraryDependencies ++= Seq(
-      "org.http4s"               %% "http4s-blaze-server" % Http4sVersion,
-      "org.http4s"               %% "http4s-circe"        % Http4sVersion,
-      "org.http4s"               %% "http4s-dsl"          % Http4sVersion,
-      "io.circe"                 %% "circe-core"          % CirceVersion,
-      "io.circe"                 %% "circe-generic"       % CirceVersion,
-      "io.circe"                 %% "circe-literal"       % CirceVersion % "test",
-      "org.tpolecat"             %% "doobie-core"         % DoobieVersion,
-      "org.tpolecat"             %% "doobie-h2"           % DoobieVersion,
-      "org.tpolecat"             %% "doobie-hikari"       % DoobieVersion,
-      "dev.zio"                  %% "zio"                 % ZIOVersion,
-      "dev.zio"                  %% "zio-test"            % ZIOVersion % "test",
-      "dev.zio"                  %% "zio-test-sbt"        % ZIOVersion % "test",
+      "org.http4s"               %% "http4s-blaze-server" % "0.21.0-M5",
+      "org.http4s"               %% "http4s-circe"        % "0.21.0-M5",
+      "org.http4s"               %% "http4s-dsl"          % "0.21.0-M5",
+      "io.circe"                 %% "circe-core"          % "0.12.3",
+      "io.circe"                 %% "circe-generic"       % "0.12.3",
+      "io.circe"                 %% "circe-literal"       % "0.12.3" % "test",
+      "org.tpolecat"             %% "doobie-core"         % "0.8.6",
+      "org.tpolecat"             %% "doobie-h2"           % "0.8.6",
+      "org.tpolecat"             %% "doobie-hikari"       % "0.8.6",
+      "dev.zio"                  %% "zio"                 % "1.0.0-RC18-2",
+      "dev.zio"                  %% "zio-test"            % "1.0.0-RC18-2" % "test",
+      "dev.zio"                  %% "zio-test-sbt"        % "1.0.0-RC18-2" % "test",
       "dev.zio"                  %% "zio-interop-cats"    % "2.0.0.0-RC12",
-      "dev.zio"                  %% "zio-logging"         % ZIOLoggingVersion,
-      "dev.zio"                  %% "zio-logging-slf4j"   % ZIOLoggingVersion,
+      "dev.zio"                  %% "zio-logging"         % "0.2.6",
+      "dev.zio"                  %% "zio-logging-slf4j"   % "0.2.6",
       "org.flywaydb"             % "flyway-core"          % "5.2.4",
       "com.h2database"           % "h2"                   % "1.4.199",
-      "org.apache.logging.log4j" % "log4j-api"            % Log4j2Version,
-      "org.apache.logging.log4j" % "log4j-core"           % Log4j2Version,
-      "org.apache.logging.log4j" % "log4j-slf4j-impl"     % Log4j2Version,
+      "org.apache.logging.log4j" % "log4j-api"            % "2.13.1",
+      "org.apache.logging.log4j" % "log4j-core"           % "2.13.1",
+      "org.apache.logging.log4j" % "log4j-slf4j-impl"     % "2.13.1",
       "com.github.pureconfig"    %% "pureconfig"          % "0.12.1",
       "com.lihaoyi"              %% "sourcecode"          % "0.1.7",
-      ("com.github.ghik" % "silencer-lib" % SilencerVersion % "provided")
+      ("com.github.ghik" % "silencer-lib" % "1.4.4" % "provided")
         .cross(CrossVersion.full),
       // plugins
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
@@ -89,7 +81,7 @@ lazy val root = (project in file("."))
         ("org.typelevel" % "kind-projector" % "0.11.0").cross(CrossVersion.full)
       ),
       compilerPlugin(
-        ("com.github.ghik" % "silencer-plugin" % SilencerVersion)
+        ("com.github.ghik" % "silencer-plugin" % "1.4.4")
           .cross(CrossVersion.full)
       ),
       compilerPlugin(scalafixSemanticdb)
@@ -97,41 +89,43 @@ lazy val root = (project in file("."))
   )
 
 //release
-import ReleaseTransformations._
-import ReleasePlugin.autoImport._
-import sbtrelease.{ Git, Utilities }
-import Utilities._
+{
+  import ReleaseTransformations._
+  import ReleasePlugin.autoImport._
+  import sbtrelease.{ Git, Utilities }
+  import Utilities._
 
-releaseProcess := Seq(
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  runTest,
-  setReleaseVersion,
-  commitReleaseVersion,
-  pushChanges,
-  tagRelease,
-  mergeReleaseVersion,
-  ReleaseStep(releaseStepTask(publish in Docker)),
-  setNextVersion,
-  commitNextVersion,
-  pushChanges
-)
+  val mergeBranch = "master"
 
-val mergeBranch = "master"
+  val mergeReleaseVersion = ReleaseStep(action = st => {
+    val git       = st.extract.get(releaseVcs).get.asInstanceOf[Git]
+    val curBranch = (git.cmd("rev-parse", "--abbrev-ref", "HEAD") !!).trim
+    st.log.info(s"####### current branch: $curBranch")
+    git.cmd("checkout", mergeBranch) ! st.log
+    st.log.info(s"####### pull $mergeBranch")
+    git.cmd("pull") ! st.log
+    st.log.info(s"####### merge")
+    git.cmd("merge", curBranch, "--no-ff", "--no-edit") ! st.log
+    st.log.info(s"####### push")
+    git.cmd("push", "origin", s"$mergeBranch:$mergeBranch") ! st.log
+    st.log.info(s"####### checkout $curBranch")
+    git.cmd("checkout", curBranch) ! st.log
+    st
+  })
 
-val mergeReleaseVersion = ReleaseStep(action = st => {
-  val git       = st.extract.get(releaseVcs).get.asInstanceOf[Git]
-  val curBranch = (git.cmd("rev-parse", "--abbrev-ref", "HEAD") !!).trim
-  st.log.info(s"####### current branch: $curBranch")
-  git.cmd("checkout", mergeBranch) ! st.log
-  st.log.info(s"####### pull $mergeBranch")
-  git.cmd("pull") ! st.log
-  st.log.info(s"####### merge")
-  git.cmd("merge", curBranch, "--no-ff", "--no-edit") ! st.log
-  st.log.info(s"####### push")
-  git.cmd("push", "origin", s"$mergeBranch:$mergeBranch") ! st.log
-  st.log.info(s"####### checkout $curBranch")
-  git.cmd("checkout", curBranch) ! st.log
-  st
-})
+  releaseProcess := Seq(
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    runTest,
+    setReleaseVersion,
+    commitReleaseVersion,
+    pushChanges,
+    tagRelease,
+    mergeReleaseVersion,
+    ReleaseStep(releaseStepTask(publish in Docker)),
+    setNextVersion,
+    commitNextVersion,
+    pushChanges
+  )
+}
