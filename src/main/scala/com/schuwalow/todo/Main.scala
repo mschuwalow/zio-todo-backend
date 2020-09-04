@@ -21,15 +21,15 @@ object Main extends App {
   override def run(args: List[String]): ZIO[ZEnv, Nothing, ZExitCode] = {
     val prog =
       for {
-        cfg    <- ZIO.access[ConfigProvider](_.get)
-        _      <- logging.log.info(s"Starting with $cfg")
+        cfg   <- ZIO.access[ConfigProvider](_.get)
+        _     <- logging.log.info(s"Starting with $cfg")
         appCfg = cfg.appConfig
 
         httpApp = Router[AppTask](
-          "/todos" -> TodoService.routes(s"${appCfg.baseUrl}/todos")
-        ).orNotFound
+                    "/todos" -> TodoService.routes(s"${appCfg.baseUrl}/todos")
+                  ).orNotFound
 
-        _ <- runHttp(httpApp, appCfg.port)
+        _      <- runHttp(httpApp, appCfg.port)
       } yield ZExitCode.success
 
     prog

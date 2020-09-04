@@ -2,16 +2,9 @@ package com.schuwalow.todo.repository
 
 import zio._
 
-import com.schuwalow.todo.{
-  TodoId,
-  TodoItem,
-  TodoItemPatchForm,
-  TodoItemPostForm
-}
+import com.schuwalow.todo.{ TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm }
 
-final class InMemoryTodoRepository(
-  ref: Ref[Map[TodoId, TodoItem]],
-  counter: Ref[Long]) {
+final class InMemoryTodoRepository(ref: Ref[Map[TodoId, TodoItem]], counter: Ref[Long]) {
 
   val todoRepository = new TodoRepository.Service {
 
@@ -30,7 +23,7 @@ final class InMemoryTodoRepository(
     override def create(todoItemForm: TodoItemPostForm): UIO[TodoItem] =
       for {
         newId <- counter.updateAndGet(_ + 1).map(TodoId)
-        todo  = todoItemForm.asTodoItem(newId)
+        todo   = todoItemForm.asTodoItem(newId)
         _     <- ref.update(store => store + (newId -> todo))
       } yield todo
 
@@ -40,13 +33,13 @@ final class InMemoryTodoRepository(
     ): UIO[Option[TodoItem]] =
       for {
         oldValue <- getById(id)
-        result <- oldValue.fold[UIO[Option[TodoItem]]](ZIO.succeed(None)) { x =>
-                   val newValue = x.update(todoItemForm)
-                   ref.update(store => store + (newValue.id -> newValue)) *> ZIO
-                     .succeed(
-                       Some(newValue)
-                     )
-                 }
+        result   <- oldValue.fold[UIO[Option[TodoItem]]](ZIO.succeed(None)) { x =>
+                      val newValue = x.update(todoItemForm)
+                      ref.update(store => store + (newValue.id -> newValue)) *> ZIO
+                        .succeed(
+                          Some(newValue)
+                        )
+                    }
       } yield result
   }
 }

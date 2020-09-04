@@ -14,13 +14,7 @@ import zio.interop.catz._
 
 import com.schuwalow.todo.config.DBConfig
 import com.schuwalow.todo.config.DbConfigProvider
-import com.schuwalow.todo.{
-  TodoId,
-  TodoItem,
-  TodoItemPatchForm,
-  TodoItemPostForm,
-  TodoPayload
-}
+import com.schuwalow.todo.{ TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm, TodoPayload }
 
 final class DoobieTodoRepository(xa: Transactor[Task]) {
   import DoobieTodoRepository.SQL
@@ -68,7 +62,7 @@ final class DoobieTodoRepository(xa: Transactor[Task]) {
     ): UIO[Option[TodoItem]] =
       (for {
         oldItem <- SQL.get(id).option
-        newItem = oldItem.map(_.update(todoItemForm))
+        newItem  = oldItem.map(_.update(todoItemForm))
         _       <- newItem.fold(connection.unit)(item => SQL.update(item).run.void)
       } yield newItem)
         .transact(xa)
@@ -78,8 +72,7 @@ final class DoobieTodoRepository(xa: Transactor[Task]) {
 
 object DoobieTodoRepository {
 
-  def layer
-    : ZLayer[Blocking with DbConfigProvider, Throwable, TodoRepository] = {
+  def layer: ZLayer[Blocking with DbConfigProvider, Throwable, TodoRepository] = {
     def initDb(cfg: DBConfig): Task[Unit] =
       Task {
         Flyway
@@ -95,22 +88,22 @@ object DoobieTodoRepository {
       ZIO.runtime[Blocking].toManaged_.flatMap { implicit rt =>
         for {
           transactEC <- Managed.succeed(
-                         rt.environment
-                           .get[Blocking.Service]
-                           .blockingExecutor
-                           .asEC
-                       )
-          connectEC = rt.platform.executor.asEC
+                          rt.environment
+                            .get[Blocking.Service]
+                            .blockingExecutor
+                            .asEC
+                        )
+          connectEC   = rt.platform.executor.asEC
           transactor <- HikariTransactor
-                         .newHikariTransactor[Task](
-                           cfg.driver,
-                           cfg.url,
-                           cfg.user,
-                           cfg.password,
-                           connectEC,
-                           Blocker.liftExecutionContext(transactEC)
-                         )
-                         .toManaged
+                          .newHikariTransactor[Task](
+                            cfg.driver,
+                            cfg.url,
+                            cfg.user,
+                            cfg.password,
+                            connectEC,
+                            Blocker.liftExecutionContext(transactEC)
+                          )
+                          .toManaged
         } yield transactor
       }
 

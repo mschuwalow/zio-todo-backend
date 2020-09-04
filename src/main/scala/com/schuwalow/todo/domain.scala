@@ -5,14 +5,9 @@ import io.circe.generic.semiauto._
 
 final case class TodoId(value: Long) extends AnyVal
 
-final case class TodoPayload(
-  title: String,
-  completed: Boolean,
-  order: Option[Int])
+final case class TodoPayload(title: String, completed: Boolean, order: Option[Int])
 
-final case class TodoItem(
-  id: TodoId,
-  item: TodoPayload) {
+final case class TodoItem(id: TodoId, item: TodoPayload) {
 
   def update(form: TodoItemPatchForm): TodoItem =
     this.copy(
@@ -25,9 +20,7 @@ final case class TodoItem(
     )
 }
 
-final case class TodoItemPostForm(
-  title: String,
-  order: Option[Int] = None) {
+final case class TodoItemPostForm(title: String, order: Option[Int] = None) {
 
   def asTodoItem(id: TodoId): TodoItem =
     TodoItem(id, this.asTodoPayload)

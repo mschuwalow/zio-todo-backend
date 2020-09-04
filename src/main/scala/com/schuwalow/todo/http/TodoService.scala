@@ -13,12 +13,7 @@ import zio.interop.catz._
 import com.schuwalow.todo._
 import com.schuwalow.todo.repository.TodoRepository
 import com.schuwalow.todo.repository._
-import com.schuwalow.todo.{
-  TodoId,
-  TodoItem,
-  TodoItemPatchForm,
-  TodoItemPostForm
-}
+import com.schuwalow.todo.{ TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm }
 
 object TodoService {
 
@@ -54,54 +49,45 @@ object TodoService {
     val dsl: Http4sDsl[TodoTask] = Http4sDsl[TodoTask]
     import dsl._
 
-    implicit def circeJsonDecoder[A](
-      implicit
-      decoder: Decoder[A]
-    ): EntityDecoder[TodoTask, A] =
+    implicit def circeJsonDecoder[A](implicit decoder: Decoder[A]): EntityDecoder[TodoTask, A] =
       jsonOf[TodoTask, A]
-    implicit def circeJsonEncoder[A](
-      implicit
-      encoder: Encoder[A]
-    ): EntityEncoder[TodoTask, A] =
+
+    implicit def circeJsonEncoder[A](implicit encoder: Encoder[A]): EntityEncoder[TodoTask, A] =
       jsonEncoderOf[TodoTask, A]
 
     HttpRoutes.of[TodoTask] {
-      case GET -> Root / LongVar(id) =>
+      case GET -> Root / LongVar(id)         =>
         for {
-          todo <- getById(TodoId(id))
-          response <- todo.fold(NotFound())(
-                       x => Ok(TodoItemWithUri(rootUri, x))
-                     )
+          todo     <- getById(TodoId(id))
+          response <- todo.fold(NotFound())(x => Ok(TodoItemWithUri(rootUri, x)))
         } yield response
 
-      case GET -> Root =>
+      case GET -> Root                       =>
         Ok(getAll.map(_.map(TodoItemWithUri(rootUri, _))))
 
-      case req @ POST -> Root =>
+      case req @ POST -> Root                =>
         req.decode[TodoItemPostForm] { todoItemForm =>
           create(todoItemForm)
             .map(TodoItemWithUri(rootUri, _))
             .flatMap(Created(_))
         }
 
-      case DELETE -> Root / LongVar(id) =>
+      case DELETE -> Root / LongVar(id)      =>
         for {
-          item <- getById(TodoId(id))
+          item   <- getById(TodoId(id))
           result <- item
-                     .map(x => delete(x.id))
-                     .fold(NotFound())(_.flatMap(Ok(_)))
+                      .map(x => delete(x.id))
+                      .fold(NotFound())(_.flatMap(Ok(_)))
         } yield result
 
-      case DELETE -> Root =>
+      case DELETE -> Root                    =>
         deleteAll *> Ok()
 
       case req @ PATCH -> Root / LongVar(id) =>
         req.decode[TodoItemPatchForm] { updateForm =>
           for {
-            update <- update(TodoId(id), updateForm)
-            response <- update.fold(NotFound())(
-                         x => Ok(TodoItemWithUri(rootUri, x))
-                       )
+            update   <- update(TodoId(id), updateForm)
+            response <- update.fold(NotFound())(x => Ok(TodoItemWithUri(rootUri, x)))
           } yield response
         }
     }
