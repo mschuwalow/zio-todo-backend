@@ -1,7 +1,5 @@
 package com.schuwalow.todo.http
 
-import com.github.ghik.silencer.silent
-import com.github.ghik.silencer.silent
 import io.circe.generic.semiauto._
 import io.circe.{ Decoder, Encoder }
 import org.http4s._
@@ -11,9 +9,7 @@ import zio._
 import zio.interop.catz._
 
 import com.schuwalow.todo._
-import com.schuwalow.todo.repository.TodoRepository
 import com.schuwalow.todo.repository._
-import com.schuwalow.todo.{ TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm }
 
 object TodoService {
 
@@ -42,7 +38,6 @@ object TodoService {
     implicit val decoder: Decoder[TodoItemWithUri] = deriveDecoder
   }
 
-  @silent("unreachable") // https://github.com/scala/bug/issues/11457
   def routes[R <: TodoRepository](rootUri: String): HttpRoutes[RIO[R, ?]] = {
     type TodoTask[A] = RIO[R, A]
 
