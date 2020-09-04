@@ -9,9 +9,7 @@ import zio.ZLayer
 
 object config {
 
-  final case class Config(
-    appConfig: AppConfig,
-    dbConfig: DBConfig)
+  final case class Config(appConfig: AppConfig, dbConfig: DBConfig)
 
   object Config {
     implicit val convert: ConfigConvert[Config] = deriveConvert
@@ -25,11 +23,10 @@ object config {
       ZLayer.fromEffect {
         ZIO
           .fromEither(ConfigSource.default.load[Config])
-          .mapError(
-            failures =>
-              new IllegalStateException(
-                s"Error loading configuration: $failures"
-              )
+          .mapError(failures =>
+            new IllegalStateException(
+              s"Error loading configuration: $failures"
+            )
           )
       }
   }
@@ -50,19 +47,13 @@ object config {
       ZLayer.fromService(_.appConfig)
   }
 
-  final case class AppConfig(
-    port: Int,
-    baseUrl: String)
+  final case class AppConfig(port: Int, baseUrl: String)
 
   object AppConfig {
     implicit val convert: ConfigConvert[AppConfig] = deriveConvert
   }
 
-  final case class DBConfig(
-    url: String,
-    driver: String,
-    user: String,
-    password: String)
+  final case class DBConfig(url: String, driver: String, user: String, password: String)
 
   object DBConfig {
     implicit val convert: ConfigConvert[DBConfig] = deriveConvert
