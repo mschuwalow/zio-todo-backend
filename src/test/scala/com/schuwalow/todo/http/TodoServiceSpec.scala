@@ -10,8 +10,8 @@ import zio._
 import zio.interop.catz._
 import zio.test._
 
-import com.schuwalow.todo.http.TodoService.TodoItemWithUri
-import com.schuwalow.todo.repository.{ InMemoryTodoRepository, TodoRepository }
+import com.schuwalow.todo.repository.TodoRepository
+import com.schuwalow.todo.testing.InMemoryTodoRepository
 
 object TodoServiceSpec extends DefaultRunnableSpec {
   type TodoTask[A] = RIO[TodoRepository, A]
@@ -98,11 +98,7 @@ object TodoServiceSpec extends DefaultRunnableSpec {
           app
             .run(setupReq)
             .flatMap { resp =>
-              implicit def circeJsonDecoder[A](
-                implicit
-                decoder: Decoder[A]
-              ): EntityDecoder[TodoTask, A] =
-                jsonOf[TodoTask, A]
+              implicit def circeJsonDecoder[A: Decoder]: EntityDecoder[TodoTask, A] = jsonOf[TodoTask, A]
               resp.as[TodoItemWithUri].map(_.id)
             }
             .flatMap(id => app.run(updateReq(id))) *> app.run(req),

@@ -12,68 +12,64 @@ import zio._
 import zio.blocking.Blocking
 import zio.interop.catz._
 
-import com.schuwalow.todo.config.DBConfig
-import com.schuwalow.todo.config.DbConfigProvider
-import com.schuwalow.todo.{ TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm, TodoPayload }
+import com.schuwalow.todo._
+import com.schuwalow.todo.config._
 
-final class DoobieTodoRepository(xa: Transactor[Task]) {
+final private class DoobieTodoRepository(xa: Transactor[Task]) extends TodoRepository.Service {
   import DoobieTodoRepository.SQL
 
-  val todoRepository = new TodoRepository.Service {
+  override def getAll: UIO[List[TodoItem]] =
+    SQL.getAll
+      .to[List]
+      .transact(xa)
+      .orDie
 
-    def getAll: UIO[List[TodoItem]] =
-      SQL.getAll
-        .to[List]
-        .transact(xa)
-        .orDie
+  override def getById(id: TodoId): UIO[Option[TodoItem]] =
+    SQL
+      .get(id)
+      .option
+      .transact(xa)
+      .orDie
 
-    def getById(id: TodoId): UIO[Option[TodoItem]] =
-      SQL
-        .get(id)
-        .option
-        .transact(xa)
-        .orDie
+  override def delete(id: TodoId): UIO[Unit] =
+    SQL
+      .delete(id)
+      .run
+      .transact(xa)
+      .unit
+      .orDie
 
-    def delete(id: TodoId): UIO[Unit] =
-      SQL
-        .delete(id)
-        .run
-        .transact(xa)
-        .unit
-        .orDie
+  override def deleteAll: UIO[Unit] =
+    SQL.deleteAll.run
+      .transact(xa)
+      .unit
+      .orDie
 
-    def deleteAll: UIO[Unit] =
-      SQL.deleteAll.run
-        .transact(xa)
-        .unit
-        .orDie
+  override def create(todoItemForm: TodoItemPostForm): UIO[TodoItem] =
+    SQL
+      .create(todoItemForm.asTodoPayload)
+      .withUniqueGeneratedKeys[Long]("ID")
+      .map(id => todoItemForm.asTodoItem(TodoId(id)))
+      .transact(xa)
+      .orDie
 
-    def create(todoItemForm: TodoItemPostForm): UIO[TodoItem] =
-      SQL
-        .create(todoItemForm.asTodoPayload)
-        .withUniqueGeneratedKeys[Long]("ID")
-        .map(id => todoItemForm.asTodoItem(TodoId(id)))
-        .transact(xa)
-        .orDie
-
-    def update(
-      id: TodoId,
-      todoItemForm: TodoItemPatchForm
-    ): UIO[Option[TodoItem]] =
-      (for {
-        oldItem <- SQL.get(id).option
-        newItem  = oldItem.map(_.update(todoItemForm))
-        _       <- newItem.fold(connection.unit)(item => SQL.update(item).run.void)
-      } yield newItem)
-        .transact(xa)
-        .orDie
-  }
+  override def update(
+    id: TodoId,
+    todoItemForm: TodoItemPatchForm
+  ): UIO[Option[TodoItem]] =
+    (for {
+      oldItem <- SQL.get(id).option
+      newItem  = oldItem.map(_.update(todoItemForm))
+      _       <- newItem.fold(connection.unit)(item => SQL.update(item).run.void)
+    } yield newItem)
+      .transact(xa)
+      .orDie
 }
 
 object DoobieTodoRepository {
 
-  def layer: ZLayer[Blocking with DbConfigProvider, Throwable, TodoRepository] = {
-    def initDb(cfg: DBConfig): Task[Unit] =
+  def layer: ZLayer[Blocking with DatabaseConfig, Throwable, TodoRepository] = {
+    def initDb(cfg: DatabaseConfig.Config): Task[Unit] =
       Task {
         Flyway
           .configure()
@@ -83,7 +79,7 @@ object DoobieTodoRepository {
       }.unit
 
     def mkTransactor(
-      cfg: DBConfig
+      cfg: DatabaseConfig.Config
     ): ZManaged[Blocking, Throwable, HikariTransactor[Task]] =
       ZIO.runtime[Blocking].toManaged_.flatMap { implicit rt =>
         for {
@@ -109,10 +105,10 @@ object DoobieTodoRepository {
 
     ZLayer.fromManaged {
       for {
-        cfg        <- ZIO.access[DbConfigProvider](_.get).toManaged_
+        cfg        <- getDatabaseConfig.toManaged_
         _          <- initDb(cfg).toManaged_
         transactor <- mkTransactor(cfg)
-      } yield new DoobieTodoRepository(transactor).todoRepository
+      } yield new DoobieTodoRepository(transactor)
     }
   }
 
