@@ -25,17 +25,14 @@ object TodoRepository extends Serializable {
     ): UIO[Option[TodoItem]]
   }
 
-  def create(todoItemForm: TodoItemPostForm): URIO[TodoRepository, TodoItem] =
-    ZIO.accessM(_.get.create(todoItemForm))
+  def create(todoItemForm: TodoItemPostForm): URIO[TodoRepository, TodoItem] = ZIO.accessM(_.get.create(todoItemForm))
 
-  def getById(id: TodoId): URIO[TodoRepository, Option[TodoItem]] =
-    ZIO.accessM(_.get.getById(id))
+  def getById(id: TodoId): URIO[TodoRepository, Option[TodoItem]] = ZIO.accessM(_.get.getById(id))
 
   val getAll: URIO[TodoRepository, List[TodoItem]] =
     ZIO.accessM(_.get.getAll)
 
-  def delete(id: TodoId): URIO[TodoRepository, Unit] =
-    ZIO.accessM(_.get.delete(id))
+  def delete(id: TodoId): URIO[TodoRepository, Unit] = ZIO.accessM(_.get.delete(id))
 
   val deleteAll: URIO[TodoRepository, Unit] =
     ZIO.accessM(_.get.deleteAll)
@@ -43,8 +40,7 @@ object TodoRepository extends Serializable {
   def update(
     id: TodoId,
     todoItemForm: TodoItemPatchForm
-  ): URIO[TodoRepository, Option[TodoItem]] =
-    ZIO.accessM(_.get.update(id, todoItemForm))
+  ): URIO[TodoRepository, Option[TodoItem]] = ZIO.accessM(_.get.update(id, todoItemForm))
 
   def withTracing[RIn, ROut <: TodoRepository with Logging, E](
     layer: ZLayer[RIn, E, ROut]
@@ -57,11 +53,9 @@ object TodoRepository extends Serializable {
           val getAll: UIO[List[TodoItem]] =
             (trace("getAll") *> service.getAll).provide(env)
 
-          def getById(id: TodoId): UIO[Option[TodoItem]] =
-            (trace(s"getById($id)") *> service.getById(id)).provide(env)
+          def getById(id: TodoId): UIO[Option[TodoItem]] = (trace(s"getById($id)") *> service.getById(id)).provide(env)
 
-          def delete(id: TodoId): UIO[Unit] =
-            (trace(s"delete($id)") *> service.delete(id)).provide(env)
+          def delete(id: TodoId): UIO[Unit] = (trace(s"delete($id)") *> service.delete(id)).provide(env)
 
           val deleteAll: UIO[Unit] =
             (trace("deleteAll") *> service.deleteAll).provide(env)

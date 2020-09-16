@@ -18,23 +18,21 @@ object TodoService {
     val dsl: Http4sDsl[TodoTask] = Http4sDsl[TodoTask]
     import dsl._
 
-    implicit def circeJsonDecoder[A: Decoder]: EntityDecoder[TodoTask, A] =
-      jsonOf[TodoTask, A]
+    implicit def circeJsonDecoder[A: Decoder]: EntityDecoder[TodoTask, A] = jsonOf[TodoTask, A]
 
-    implicit def circeJsonEncoder[A: Encoder]: EntityEncoder[TodoTask, A] =
-      jsonEncoderOf[TodoTask, A]
+    implicit def circeJsonEncoder[A: Encoder]: EntityEncoder[TodoTask, A] = jsonEncoderOf[TodoTask, A]
 
     HttpRoutes.of[TodoTask] {
-      case GET -> Root / LongVar(id)         =>
+      case GET -> Root / LongVar(id) =>
         for {
           todo     <- TodoRepository.getById(TodoId(id))
           response <- todo.fold(NotFound())(x => Ok(TodoItemWithUri(rootUri, x)))
         } yield response
 
-      case GET -> Root                       =>
+      case GET -> Root =>
         Ok(TodoRepository.getAll.map(_.map(TodoItemWithUri(rootUri, _))))
 
-      case req @ POST -> Root                =>
+      case req @ POST -> Root =>
         req.decode[TodoItemPostForm] { todoItemForm =>
           TodoRepository
             .create(todoItemForm)
@@ -42,7 +40,7 @@ object TodoService {
             .flatMap(Created(_))
         }
 
-      case DELETE -> Root / LongVar(id)      =>
+      case DELETE -> Root / LongVar(id) =>
         for {
           item   <- TodoRepository.getById(TodoId(id))
           result <- item
@@ -50,7 +48,7 @@ object TodoService {
                       .fold(NotFound())(_.flatMap(Ok(_)))
         } yield result
 
-      case DELETE -> Root                    =>
+      case DELETE -> Root =>
         TodoRepository.deleteAll *> Ok()
 
       case req @ PATCH -> Root / LongVar(id) =>
