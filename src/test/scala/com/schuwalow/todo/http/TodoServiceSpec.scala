@@ -63,8 +63,7 @@ object TodoServiceSpec extends DefaultRunnableSpec {
               implicit def circeJsonDecoder[A](
                 implicit
                 decoder: Decoder[A]
-              ): EntityDecoder[TodoTask, A] =
-                jsonOf[TodoTask, A]
+              ): EntityDecoder[TodoTask, A] = jsonOf[TodoTask, A]
               resp.as[TodoItemWithUri].map(_.id)
             }
             .flatMap(id => app.run(deleteReq(id))) *> app.run(req),

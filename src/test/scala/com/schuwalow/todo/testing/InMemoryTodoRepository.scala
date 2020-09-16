@@ -10,17 +10,13 @@ final private class InMemoryTodoRepository(
   counter: Ref[Long])
     extends TodoRepository.Service {
 
-  override def getAll: UIO[List[TodoItem]] =
-    ref.get.map(_.values.toList)
+  override def getAll: UIO[List[TodoItem]] = ref.get.map(_.values.toList)
 
-  override def getById(id: TodoId): UIO[Option[TodoItem]] =
-    ref.get.map(_.get(id))
+  override def getById(id: TodoId): UIO[Option[TodoItem]] = ref.get.map(_.get(id))
 
-  override def delete(id: TodoId): UIO[Unit] =
-    ref.update(store => store - id).unit
+  override def delete(id: TodoId): UIO[Unit] = ref.update(store => store - id).unit
 
-  override def deleteAll: UIO[Unit] =
-    ref.update(_.empty).unit
+  override def deleteAll: UIO[Unit] = ref.update(_.empty).unit
 
   override def create(todoItemForm: TodoItemPostForm): UIO[TodoItem] =
     for {

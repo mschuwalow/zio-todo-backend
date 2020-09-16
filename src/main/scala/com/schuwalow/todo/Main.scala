@@ -27,7 +27,7 @@ object Main extends App {
                     "/todos" -> TodoService.routes(s"${cfg.http.baseUrl}/todos")
                   ).orNotFound
 
-        _      <- runHttp(httpApp, cfg.http.port)
+        _ <- runHttp(httpApp, cfg.http.port)
       } yield ZExitCode.success
 
     prog

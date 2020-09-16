@@ -22,11 +22,9 @@ final case class TodoItem(id: TodoId, item: TodoPayload) {
 
 final case class TodoItemPostForm(title: String, order: Option[Int] = None) {
 
-  def asTodoItem(id: TodoId): TodoItem =
-    TodoItem(id, this.asTodoPayload)
+  def asTodoItem(id: TodoId): TodoItem = TodoItem(id, this.asTodoPayload)
 
-  def asTodoPayload: TodoPayload =
-    TodoPayload(title, false, order)
+  def asTodoPayload: TodoPayload = TodoPayload(title, false, order)
 }
 
 object TodoItemPostForm {

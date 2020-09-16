@@ -11,8 +11,7 @@ object HTTPSpec {
   def request[F[_]](
     method: Method,
     uri: String
-  ): Request[F] =
-    Request(method = method, uri = Uri.fromString(uri).toOption.get)
+  ): Request[F] = Request(method = method, uri = Uri.fromString(uri).toOption.get)
 
   def checkRequest[R, A](
     actual: RIO[R, Response[RIO[R, ?]]],
@@ -34,6 +33,5 @@ object HTTPSpec {
     actual: RIO[R, Response[RIO[R, ?]]],
     expectedStatus: Status,
     expectedBody: String
-  ): RIO[R, TestResult] =
-    checkRequest(actual, expectedStatus, Some(expectedBody))
+  ): RIO[R, TestResult] = checkRequest(actual, expectedStatus, Some(expectedBody))
 }
