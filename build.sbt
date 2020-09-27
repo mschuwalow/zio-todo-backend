@@ -72,7 +72,7 @@ lazy val root = (project in file("."))
       "org.apache.logging.log4j"      % "log4j-api"           % "2.13.3",
       "org.apache.logging.log4j"      % "log4j-core"          % "2.13.3",
       "org.apache.logging.log4j"      % "log4j-slf4j-impl"    % "2.13.3",
-      "com.github.pureconfig"        %% "pureconfig"          % "0.13.0",
+      "com.github.pureconfig"        %% "pureconfig"          % "0.14.0",
       "com.lihaoyi"                  %% "sourcecode"          % "0.2.1",
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
       compilerPlugin(("org.typelevel" % "kind-projector"      % "0.11.0").cross(CrossVersion.full)),
