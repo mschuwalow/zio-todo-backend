@@ -64,7 +64,7 @@ lazy val root = (project in file("."))
       "dev.zio"                      %% "zio"                 % "1.0.1",
       "dev.zio"                      %% "zio-test"            % "1.0.1"  % "test",
       "dev.zio"                      %% "zio-test-sbt"        % "1.0.1"  % "test",
-      "dev.zio"                      %% "zio-interop-cats"    % "2.1.4.0",
+      "dev.zio"                      %% "zio-interop-cats"    % "2.1.4.1",
       "dev.zio"                      %% "zio-logging"         % "0.5.2",
       "dev.zio"                      %% "zio-logging-slf4j"   % "0.5.2",
       "org.flywaydb"                  % "flyway-core"         % "7.0.0",
