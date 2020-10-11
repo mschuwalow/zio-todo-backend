@@ -67,7 +67,7 @@ lazy val root = (project in file("."))
       "dev.zio"                      %% "zio-interop-cats"    % "2.1.4.1",
       "dev.zio"                      %% "zio-logging"         % "0.5.3",
       "dev.zio"                      %% "zio-logging-slf4j"   % "0.5.3",
-      "org.flywaydb"                  % "flyway-core"         % "7.0.0",
+      "org.flywaydb"                  % "flyway-core"         % "7.0.2",
       "com.h2database"                % "h2"                  % "1.4.200",
       "org.apache.logging.log4j"      % "log4j-api"           % "2.13.3",
       "org.apache.logging.log4j"      % "log4j-core"          % "2.13.3",
