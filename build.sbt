@@ -18,7 +18,7 @@ lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
   .settings(
     packageName in Docker := "zio-todo",
-    dockerUsername in Docker := Some("grumpyraven"),
+    dockerUsername in Docker := Some("mschuwalow"),
     dockerExposedPorts in Docker := Seq(8080),
     organization := "com.schuwalow",
     name := "zio-todo-backend",
