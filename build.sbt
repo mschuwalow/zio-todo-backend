@@ -17,7 +17,7 @@ scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.5.
 lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
   .settings(
-    packageName in Docker := "zio-todo",
+    packageName in Docker := "zio-todo-backend",
     dockerUsername in Docker := Some("mschuwalow"),
     dockerExposedPorts in Docker := Seq(8080),
     organization := "com.schuwalow",
