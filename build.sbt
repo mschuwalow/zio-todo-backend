@@ -12,7 +12,7 @@ addCommandAlias(
   "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck"
 )
 
-scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.5.4"
+scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.5.5"
 
 lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
