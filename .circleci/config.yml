@@ -70,6 +70,6 @@ workflows:
               only:
                 - develop
       - release:
-          context: global
+          context: DockerHub
           requires:
             - approve-release
