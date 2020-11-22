@@ -28,7 +28,7 @@ lazy val root = (project in file("."))
         s"https://github.com/mschuwalow/${name.value}/blob/v${version.value}/LICENSE"
       )
     ),
-    scalaVersion := "2.13.3",
+    scalaVersion := "2.13.4",
     testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
     scalacOptions := Seq(
       "-feature",
