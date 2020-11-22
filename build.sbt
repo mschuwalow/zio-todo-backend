@@ -75,7 +75,7 @@ lazy val root = (project in file("."))
       "com.github.pureconfig"        %% "pureconfig"          % "0.14.0",
       "com.lihaoyi"                  %% "sourcecode"          % "0.2.1",
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
-      compilerPlugin(("org.typelevel" % "kind-projector"      % "0.11.0").cross(CrossVersion.full)),
+      compilerPlugin(("org.typelevel" % "kind-projector"      % "0.11.1").cross(CrossVersion.full)),
       compilerPlugin(scalafixSemanticdb)
     )
   )
