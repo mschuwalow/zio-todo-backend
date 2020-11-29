@@ -51,9 +51,9 @@ lazy val root = (project in file("."))
               "-opt:l:inline"
             )),
     libraryDependencies ++= Seq(
-      "org.http4s"                   %% "http4s-blaze-server" % "0.21.9",
-      "org.http4s"                   %% "http4s-circe"        % "0.21.9",
-      "org.http4s"                   %% "http4s-dsl"          % "0.21.9",
+      "org.http4s"                   %% "http4s-blaze-server" % "0.21.11",
+      "org.http4s"                   %% "http4s-circe"        % "0.21.11",
+      "org.http4s"                   %% "http4s-dsl"          % "0.21.11",
       "io.circe"                     %% "circe-core"          % "0.13.0",
       "io.circe"                     %% "circe-generic"       % "0.13.0",
       "io.circe"                     %% "circe-literal"       % "0.13.0" % "test",
@@ -67,7 +67,7 @@ lazy val root = (project in file("."))
       "dev.zio"                      %% "zio-interop-cats"    % "2.2.0.1",
       "dev.zio"                      %% "zio-logging"         % "0.5.3",
       "dev.zio"                      %% "zio-logging-slf4j"   % "0.5.3",
-      "org.flywaydb"                  % "flyway-core"         % "7.2.0",
+      "org.flywaydb"                  % "flyway-core"         % "7.2.1",
       "com.h2database"                % "h2"                  % "1.4.200",
       "org.apache.logging.log4j"      % "log4j-api"           % "2.14.0",
       "org.apache.logging.log4j"      % "log4j-core"          % "2.14.0",
@@ -75,7 +75,7 @@ lazy val root = (project in file("."))
       "com.github.pureconfig"        %% "pureconfig"          % "0.14.0",
       "com.lihaoyi"                  %% "sourcecode"          % "0.2.1",
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
-      compilerPlugin(("org.typelevel" % "kind-projector"      % "0.11.0").cross(CrossVersion.full)),
+      compilerPlugin(("org.typelevel" % "kind-projector"      % "0.11.1").cross(CrossVersion.full)),
       compilerPlugin(scalafixSemanticdb)
     )
   )
