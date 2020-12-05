@@ -23,7 +23,7 @@ object Dependencies {
       "org.tpolecat"                 %% "doobie-core"         % doobie,
       "org.tpolecat"                 %% "doobie-h2"           % doobie,
       "org.tpolecat"                 %% "doobie-hikari"       % doobie,
-      "org.typelevel"                %% "jawn-parser"         % "1.0.1" % "test",
+      "org.typelevel"                %% "jawn-parser"         % "1.0.2" % "test",
       "dev.zio"                      %% "zio"                 % zio,
       "dev.zio"                      %% "zio-test"            % zio     % "test",
       "dev.zio"                      %% "zio-test-sbt"        % zio     % "test",
