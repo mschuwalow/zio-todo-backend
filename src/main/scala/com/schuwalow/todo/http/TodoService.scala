@@ -12,7 +12,7 @@ import com.schuwalow.todo.repository._
 
 object TodoService {
 
-  def routes[R <: TodoRepository](rootUri: String): HttpRoutes[RIO[R, ?]] = {
+  def routes[R <: TodoRepository](rootUri: String): HttpRoutes[RIO[R, *]] = {
     type TodoTask[A] = RIO[R, A]
 
     val dsl: Http4sDsl[TodoTask] = Http4sDsl[TodoTask]
