@@ -38,12 +38,13 @@ inThisBuild(
 lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
   .settings(
-    name := "zio-todo-backend",
-    dockerUsername in Docker := Some("mschuwalow"),
+    dockerBaseImage := "openjdk:11-jre-slim-buster",
     dockerExposedPorts in Docker := Seq(8080),
+    dockerUsername in Docker := Some("mschuwalow"),
+    libraryDependencies ++= Dependencies.App,
+    name := "zio-todo-backend",
     scalacOptions in ThisBuild := Options.scalacOptions(scalaVersion.value, isSnapshot.value),
-    testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
-    libraryDependencies ++= Dependencies.App
+    testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )
 
 releaseProcess := Release.releaseProcess
