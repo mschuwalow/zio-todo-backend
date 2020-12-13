@@ -8,7 +8,7 @@ object Dependencies {
     val http4s     = "0.21.13"
     val log4j      = "2.14.0"
     val zio        = "1.0.3"
-    val zioLogging = "0.5.3"
+    val zioLogging = "0.5.4"
   }
   import Versions._
 
@@ -30,7 +30,7 @@ object Dependencies {
       "dev.zio"                      %% "zio-interop-cats"    % "2.2.0.1",
       "dev.zio"                      %% "zio-logging"         % zioLogging,
       "dev.zio"                      %% "zio-logging-slf4j"   % zioLogging,
-      "org.flywaydb"                  % "flyway-core"         % "7.3.0",
+      "org.flywaydb"                  % "flyway-core"         % "7.3.1",
       "com.h2database"                % "h2"                  % "1.4.200",
       "org.apache.logging.log4j"      % "log4j-api"           % log4j,
       "org.apache.logging.log4j"      % "log4j-core"          % log4j,
@@ -38,6 +38,6 @@ object Dependencies {
       "com.github.pureconfig"        %% "pureconfig"          % "0.14.0",
       "com.lihaoyi"                  %% "sourcecode"          % "0.2.1",
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
-      compilerPlugin(("org.typelevel" % "kind-projector"      % "0.11.1").cross(CrossVersion.full))
+      compilerPlugin(("org.typelevel" % "kind-projector"      % "0.11.2").cross(CrossVersion.full))
     )
 }

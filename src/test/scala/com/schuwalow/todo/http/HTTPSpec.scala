@@ -14,11 +14,11 @@ object HTTPSpec {
   ): Request[F] = Request(method = method, uri = Uri.fromString(uri).toOption.get)
 
   def checkRequest[R, A](
-    actual: RIO[R, Response[RIO[R, ?]]],
+    actual: RIO[R, Response[RIO[R, *]]],
     expectedStatus: Status,
     expectedBody: Option[A]
   )(implicit
-    ev: EntityDecoder[RIO[R, ?], A]
+    ev: EntityDecoder[RIO[R, *], A]
   ): RIO[R, TestResult] =
     for {
       actual      <- actual
@@ -30,7 +30,7 @@ object HTTPSpec {
     } yield bodyResult && statusResult
 
   def checkRequestRaw[R, A](
-    actual: RIO[R, Response[RIO[R, ?]]],
+    actual: RIO[R, Response[RIO[R, *]]],
     expectedStatus: Status,
     expectedBody: String
   ): RIO[R, TestResult] = checkRequest(actual, expectedStatus, Some(expectedBody))
