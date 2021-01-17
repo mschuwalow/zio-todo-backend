@@ -4,7 +4,7 @@ object Dependencies {
 
   object Versions {
     val circe      = "0.13.0"
-    val doobie     = "0.9.4"
+    val doobie     = "0.10.0"
     val http4s     = "0.21.15"
     val log4j      = "2.14.0"
     val zio        = "1.0.3"
@@ -30,7 +30,7 @@ object Dependencies {
       "dev.zio"                      %% "zio-interop-cats"    % "2.2.0.1",
       "dev.zio"                      %% "zio-logging"         % zioLogging,
       "dev.zio"                      %% "zio-logging-slf4j"   % zioLogging,
-      "org.flywaydb"                  % "flyway-core"         % "7.3.2",
+      "org.flywaydb"                  % "flyway-core"         % "7.4.0",
       "com.h2database"                % "h2"                  % "1.4.200",
       "org.apache.logging.log4j"      % "log4j-api"           % log4j,
       "org.apache.logging.log4j"      % "log4j-core"          % log4j,
