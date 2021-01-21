@@ -38,6 +38,6 @@ object Dependencies {
       "com.github.pureconfig"        %% "pureconfig"          % "0.14.0",
       "com.lihaoyi"                  %% "sourcecode"          % "0.2.1",
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
-      compilerPlugin(("org.typelevel" % "kind-projector"      % "0.11.2").cross(CrossVersion.full))
+      compilerPlugin(("org.typelevel" % "kind-projector"      % "0.11.3").cross(CrossVersion.full))
     )
 }
