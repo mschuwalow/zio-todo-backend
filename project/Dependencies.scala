@@ -8,7 +8,7 @@ object Dependencies {
     val http4s     = "0.21.15"
     val log4j      = "2.14.0"
     val zio        = "1.0.3"
-    val zioLogging = "0.5.4"
+    val zioLogging = "0.5.5"
   }
   import Versions._
 
