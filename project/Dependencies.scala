@@ -5,7 +5,7 @@ object Dependencies {
   object Versions {
     val circe      = "0.13.0"
     val doobie     = "0.10.0"
-    val http4s     = "0.21.18"
+    val http4s     = "0.21.19"
     val log4j      = "2.14.0"
     val zio        = "1.0.4-2"
     val zioLogging = "0.5.6"
