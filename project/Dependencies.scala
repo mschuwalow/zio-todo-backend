@@ -7,7 +7,7 @@ object Dependencies {
     val doobie     = "0.10.0"
     val http4s     = "0.21.20"
     val log4j      = "2.14.0"
-    val zio        = "1.0.4-2"
+    val zio        = "1.0.5"
     val zioLogging = "0.5.7"
   }
   import Versions._
