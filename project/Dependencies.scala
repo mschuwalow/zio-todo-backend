@@ -30,7 +30,7 @@ object Dependencies {
       "dev.zio"                      %% "zio-interop-cats"    % "2.4.0.0",
       "dev.zio"                      %% "zio-logging"         % zioLogging,
       "dev.zio"                      %% "zio-logging-slf4j"   % zioLogging,
-      "org.flywaydb"                  % "flyway-core"         % "7.7.3",
+      "org.flywaydb"                  % "flyway-core"         % "7.8.1",
       "com.h2database"                % "h2"                  % "1.4.200",
       "org.apache.logging.log4j"      % "log4j-api"           % log4j,
       "org.apache.logging.log4j"      % "log4j-core"          % log4j,
