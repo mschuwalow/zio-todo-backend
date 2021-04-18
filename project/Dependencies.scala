@@ -35,7 +35,7 @@ object Dependencies {
       "org.apache.logging.log4j"      % "log4j-api"           % log4j,
       "org.apache.logging.log4j"      % "log4j-core"          % log4j,
       "org.apache.logging.log4j"      % "log4j-slf4j-impl"    % log4j,
-      "com.github.pureconfig"        %% "pureconfig"          % "0.14.1",
+      "com.github.pureconfig"        %% "pureconfig"          % "0.15.0",
       "com.lihaoyi"                  %% "sourcecode"          % "0.2.5",
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
       compilerPlugin(("org.typelevel" % "kind-projector"      % "0.11.3").cross(CrossVersion.full))
