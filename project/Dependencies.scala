@@ -27,7 +27,7 @@ object Dependencies {
       "dev.zio"                      %% "zio"                 % zio,
       "dev.zio"                      %% "zio-test"            % zio     % "test",
       "dev.zio"                      %% "zio-test-sbt"        % zio     % "test",
-      "dev.zio"                      %% "zio-interop-cats"    % "2.4.1.0",
+      "dev.zio"                      %% "zio-interop-cats"    % "3.0.2.0",
       "dev.zio"                      %% "zio-logging"         % zioLogging,
       "dev.zio"                      %% "zio-logging-slf4j"   % zioLogging,
       "org.flywaydb"                  % "flyway-core"         % "7.8.1",
