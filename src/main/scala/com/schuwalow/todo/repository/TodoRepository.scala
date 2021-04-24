@@ -1,10 +1,8 @@
 package com.schuwalow.todo.repository
 
-import zio._
-import zio.logging.Logging
-import zio.logging.log
-
 import com.schuwalow.todo.{ TodoId, TodoItem, TodoItemPatchForm, TodoItemPostForm }
+import zio._
+import zio.logging.{ log, Logging }
 
 object TodoRepository extends Serializable {
 

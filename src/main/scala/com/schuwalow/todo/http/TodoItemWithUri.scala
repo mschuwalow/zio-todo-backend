@@ -1,9 +1,8 @@
 package com.schuwalow.todo.http
 
+import com.schuwalow.todo._
 import io.circe.generic.semiauto._
 import io.circe.{ Decoder, Encoder }
-
-import com.schuwalow.todo._
 
 final case class TodoItemWithUri(
   id: Long,

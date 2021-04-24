@@ -1,6 +1,8 @@
 package com.schuwalow.todo.http
 
-import HTTPSpec._
+import com.schuwalow.todo.http.HTTPSpec._
+import com.schuwalow.todo.repository.TodoRepository
+import com.schuwalow.todo.testing.InMemoryTodoRepository
 import io.circe.Decoder
 import io.circe.literal._
 import org.http4s.circe._
@@ -9,9 +11,6 @@ import org.http4s.{ Status, _ }
 import zio._
 import zio.interop.catz._
 import zio.test._
-
-import com.schuwalow.todo.repository.TodoRepository
-import com.schuwalow.todo.testing.InMemoryTodoRepository
 
 object TodoServiceSpec extends DefaultRunnableSpec {
   type TodoTask[A] = RIO[TodoRepository, A]

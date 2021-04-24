@@ -1,9 +1,8 @@
 package com.schuwalow.todo.testing
 
-import zio._
-
 import com.schuwalow.todo._
 import com.schuwalow.todo.repository.TodoRepository
+import zio._
 
 final private class InMemoryTodoRepository(
   ref: Ref[Map[TodoId, TodoItem]],
