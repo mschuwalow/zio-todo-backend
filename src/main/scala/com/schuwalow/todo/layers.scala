@@ -1,12 +1,11 @@
 package com.schuwalow.todo
 
+import com.schuwalow.todo.config._
+import com.schuwalow.todo.repository._
 import zio.ZLayer
 import zio.blocking.Blocking
 import zio.logging.Logging
 import zio.logging.slf4j.Slf4jLogger
-
-import com.schuwalow.todo.config._
-import com.schuwalow.todo.repository._
 
 object layers {
 

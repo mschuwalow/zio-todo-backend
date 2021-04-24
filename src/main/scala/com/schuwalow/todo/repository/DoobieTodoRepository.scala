@@ -2,6 +2,8 @@ package com.schuwalow.todo.repository
 
 import cats.effect.Blocker
 import cats.implicits._
+import com.schuwalow.todo._
+import com.schuwalow.todo.config._
 import doobie._
 import doobie.free.connection
 import doobie.hikari._
@@ -11,9 +13,6 @@ import org.flywaydb.core.Flyway
 import zio._
 import zio.blocking.Blocking
 import zio.interop.catz._
-
-import com.schuwalow.todo._
-import com.schuwalow.todo.config._
 
 final private class DoobieTodoRepository(xa: Transactor[Task]) extends TodoRepository.Service {
   import DoobieTodoRepository.SQL

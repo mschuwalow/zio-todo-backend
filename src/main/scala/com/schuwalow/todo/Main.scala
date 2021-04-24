@@ -1,6 +1,9 @@
 package com.schuwalow.todo
 
 import cats.effect._
+import com.schuwalow.todo.config._
+import com.schuwalow.todo.http.TodoService
+import com.schuwalow.todo.repository.TodoRepository
 import fs2.Stream.Compiler._
 import org.http4s.HttpApp
 import org.http4s.implicits._
@@ -10,10 +13,6 @@ import org.http4s.server.middleware.CORS
 import zio.clock.Clock
 import zio.interop.catz._
 import zio.{ ExitCode => ZExitCode, _ }
-
-import com.schuwalow.todo.config._
-import com.schuwalow.todo.http.TodoService
-import com.schuwalow.todo.repository.TodoRepository
 
 object Main extends App {
   type AppTask[A] = RIO[layers.AppEnv with Clock, A]

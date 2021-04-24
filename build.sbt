@@ -30,8 +30,8 @@ inThisBuild(
     ),
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
-    scalaVersion := "2.13.5",
-    scalafixDependencies += "com.nequissimus" %% "sort-imports" % "0.5.5"
+    scalaVersion := "2.13.4",
+    scalafixDependencies ++= Dependencies.ScalaFix
   )
 )
 

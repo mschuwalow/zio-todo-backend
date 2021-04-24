@@ -1,14 +1,13 @@
 package com.schuwalow.todo.http
 
+import com.schuwalow.todo._
+import com.schuwalow.todo.repository._
 import io.circe.{ Decoder, Encoder }
 import org.http4s._
 import org.http4s.circe._
 import org.http4s.dsl.Http4sDsl
 import zio._
 import zio.interop.catz._
-
-import com.schuwalow.todo._
-import com.schuwalow.todo.repository._
 
 object TodoService {
 
