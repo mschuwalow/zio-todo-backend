@@ -34,7 +34,8 @@ object TodoItemPostForm {
 final case class TodoItemPatchForm(
   title: Option[String] = None,
   completed: Option[Boolean] = None,
-  order: Option[Int] = None)
+  order: Option[Int] = None
+)
 
 object TodoItemPatchForm {
   implicit val decoder: Decoder[TodoItemPatchForm] = deriveDecoder

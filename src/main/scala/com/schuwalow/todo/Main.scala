@@ -12,7 +12,7 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.CORS
 import zio.clock.Clock
 import zio.interop.catz._
-import zio.{ ExitCode => ZExitCode, _ }
+import zio.{ExitCode => ZExitCode, _}
 
 object Main extends App {
   type AppTask[A] = RIO[layers.AppEnv with Clock, A]
