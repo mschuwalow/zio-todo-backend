@@ -9,7 +9,7 @@ object Dependencies {
     val flyway           = "7.8.1"
     val h2               = "1.4.200"
     val http4s           = "0.21.22"
-    val jawn             = "1.0.3"
+    val jawn             = "1.1.2"
     val kindProjector    = "0.11.3"
     val log4j            = "2.14.1"
     val organizeImports  = "0.5.0"
