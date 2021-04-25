@@ -2,14 +2,9 @@ package com.schuwalow.todo.http
 
 import com.schuwalow.todo._
 import io.circe.generic.semiauto._
-import io.circe.{ Decoder, Encoder }
+import io.circe.{Decoder, Encoder}
 
-final case class TodoItemWithUri(
-  id: Long,
-  url: String,
-  title: String,
-  completed: Boolean,
-  order: Option[Int])
+final case class TodoItemWithUri(id: Long, url: String, title: String, completed: Boolean, order: Option[Int])
 
 object TodoItemWithUri {
 

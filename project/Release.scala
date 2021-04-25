@@ -2,7 +2,7 @@ import sbt._
 import Keys._
 import sbtrelease.ReleasePlugin.autoImport._
 import ReleaseTransformations._
-import sbtrelease.{ Git, Utilities }
+import sbtrelease.{Git, Utilities}
 import Utilities._
 import com.typesafe.sbt.packager.docker.DockerPlugin.autoImport._
 

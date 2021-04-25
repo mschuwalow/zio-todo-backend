@@ -7,7 +7,7 @@ import io.circe.Decoder
 import io.circe.literal._
 import org.http4s.circe._
 import org.http4s.implicits._
-import org.http4s.{ Status, _ }
+import org.http4s.{Status, _}
 import zio._
 import zio.interop.catz._
 import zio.test._
@@ -59,8 +59,7 @@ object TodoServiceSpec extends DefaultRunnableSpec {
           app
             .run(setupReq)
             .flatMap { resp =>
-              implicit def circeJsonDecoder[A](
-                implicit
+              implicit def circeJsonDecoder[A](implicit
                 decoder: Decoder[A]
               ): EntityDecoder[TodoTask, A] = jsonOf[TodoTask, A]
               resp.as[TodoItemWithUri].map(_.id)
