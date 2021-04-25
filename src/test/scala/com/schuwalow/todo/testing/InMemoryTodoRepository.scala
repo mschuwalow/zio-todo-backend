@@ -4,9 +4,7 @@ import com.schuwalow.todo._
 import com.schuwalow.todo.repository.TodoRepository
 import zio._
 
-final private class InMemoryTodoRepository(
-  ref: Ref[Map[TodoId, TodoItem]],
-  counter: Ref[Long])
+final private class InMemoryTodoRepository(ref: Ref[Map[TodoId, TodoItem]], counter: Ref[Long])
     extends TodoRepository.Service {
 
   override def getAll: UIO[List[TodoItem]] = ref.get.map(_.values.toList)
