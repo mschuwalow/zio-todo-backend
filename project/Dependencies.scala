@@ -3,26 +3,24 @@ import sbt._
 object Dependencies {
 
   object Versions {
-    val betterMonadicFor = "0.3.1"
-    val circe            = "0.13.0"
-    val doobie           = "0.13.1"
+    val circe            = "0.14.0-M7"
+    val doobie           = "0.13.4"
     val flyway           = "7.8.2"
     val h2               = "1.4.200"
-    val http4s           = "0.21.22"
-    val jawn             = "1.0.1"
-    val kindProjector    = "0.11.3"
+    val http4s           = "0.23.0-M1"
+    val jawn             = "1.1.2"
     val log4j            = "2.14.1"
     val organizeImports  = "0.5.0"
     val pureConfig       = "0.15.0"
-    val zio              = "1.0.7"
-    val zioInteropCats   = "2.4.1.0"
-    val zioLogging       = "0.5.8"
+    val zio              = "1.0.8"
+    val zioInteropCats   = "3.1.1.0"
+    val zioLogging       = "0.5.9"
   }
   import Versions._
 
   val App =
     List(
-      "com.github.pureconfig"        %% "pureconfig"          % pureConfig,
+      ("com.github.pureconfig"        %% "pureconfig"          % pureConfig).withCrossVersion(CrossVersion.for3Use2_13),
       "com.h2database"                % "h2"                  % h2,
       "dev.zio"                      %% "zio-interop-cats"    % zioInteropCats,
       "dev.zio"                      %% "zio-logging-slf4j"   % zioLogging,
@@ -32,7 +30,7 @@ object Dependencies {
       "dev.zio"                      %% "zio"                 % zio,
       "io.circe"                     %% "circe-core"          % circe,
       "io.circe"                     %% "circe-generic"       % circe,
-      "io.circe"                     %% "circe-literal"       % circe % "test",
+//      "io.circe"                     %% "circe-literal"       % circe % "test",
       "org.apache.logging.log4j"      % "log4j-api"           % log4j,
       "org.apache.logging.log4j"      % "log4j-core"          % log4j,
       "org.apache.logging.log4j"      % "log4j-slf4j-impl"    % log4j,
@@ -43,9 +41,7 @@ object Dependencies {
       "org.tpolecat"                 %% "doobie-core"         % doobie,
       "org.tpolecat"                 %% "doobie-h2"           % doobie,
       "org.tpolecat"                 %% "doobie-hikari"       % doobie,
-      "org.typelevel"                %% "jawn-parser"         % jawn  % "test",
-      compilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicFor),
-      compilerPlugin(("org.typelevel" % "kind-projector"      % kindProjector).cross(CrossVersion.full))
+      "org.typelevel"                %% "jawn-parser"         % jawn  % "test"
     )
 
   val ScalaFix =
