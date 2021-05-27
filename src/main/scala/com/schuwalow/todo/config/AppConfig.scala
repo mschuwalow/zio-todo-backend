@@ -1,7 +1,7 @@
 package com.schuwalow.todo.config
 
 import pureconfig._
-import pureconfig.generic.semiauto._
+//import pureconfig.generic.semiauto._
 import zio._
 
 object AppConfig {
@@ -9,7 +9,7 @@ object AppConfig {
   final case class Config(http: HttpConfig.Config, database: DatabaseConfig.Config)
 
   object Config {
-    implicit val convert: ConfigConvert[Config] = deriveConvert
+    implicit val convert: ConfigConvert[Config] = ???
   }
 
   val live: ZLayer[Any, IllegalStateException, AppConfig] =

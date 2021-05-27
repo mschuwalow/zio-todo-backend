@@ -1,14 +1,15 @@
 package com.schuwalow.todo
 
 import cats.effect._
+import cats.effect.Sync
 import com.schuwalow.todo.config._
 import com.schuwalow.todo.http.TodoService
 import com.schuwalow.todo.repository.TodoRepository
-import fs2.Stream.Compiler._
+//import fs2.Stream.Compiler._
 import org.http4s.HttpApp
 import org.http4s.implicits._
 import org.http4s.server.Router
-import org.http4s.server.blaze.BlazeServerBuilder
+import org.http4s.blaze.server.BlazeServerBuilder
 import org.http4s.server.middleware.CORS
 import zio.clock.Clock
 import zio.interop.catz._

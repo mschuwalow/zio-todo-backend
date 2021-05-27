@@ -7,27 +7,29 @@ object Options {
     val baseOptions = Seq(
       "-feature",
       "-deprecation",
-      "-explaintypes",
+//      "-explaintypes",
       "-unchecked",
       "-encoding",
       "UTF-8",
       "-language:higherKinds",
       "-language:existentials",
-      "-Xfatal-warnings",
-      "-Xlint:-byname-implicit,_",
-      "-Ywarn-value-discard",
-      "-Ywarn-numeric-widen",
-      "-Ywarn-extra-implicit",
-      "-Ywarn-unused"
+      "-Ykind-projector"
+//      "-Xfatal-warnings"
+//      "-Xlint:-byname-implicit,_",
+//      "-Ywarn-value-discard",
+//      "-Ywarn-numeric-widen",
+//      "-Ywarn-extra-implicit",
+//      "-Ywarn-unused"
     )
 
-    val optimizeOptions =
-      if (optimize) {
-        Seq(
-          "-opt:l:inline"
-        )
-      } else Seq.empty
+    val optimizeOptions = Seq.empty
+//      if (optimize) {
+//        Seq(
+////          "-opt:l:inline"
+//        )
+//      } else Seq.empty
 
     baseOptions ++ optimizeOptions
+//    baseOptions
   }
 }

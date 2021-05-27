@@ -1,7 +1,7 @@
 package com.schuwalow.todo.config
 
 import pureconfig._
-import pureconfig.generic.semiauto._
+//import pureconfig.generic.semiauto._
 import zio._
 
 object HttpConfig {
@@ -9,7 +9,7 @@ object HttpConfig {
   final case class Config(port: Int, baseUrl: String)
 
   object Config {
-    implicit val convert: ConfigConvert[Config] = deriveConvert
+    implicit val convert: ConfigConvert[Config] = ???
   }
 
   val fromAppConfig: ZLayer[AppConfig, Nothing, HttpConfig] =

@@ -4,10 +4,10 @@ object Dependencies {
 
   object Versions {
     val circe            = "0.14.0-M7"
-    val doobie           = "0.13.4"
+    val doobie           = "1.0.0-M5"
     val flyway           = "7.8.2"
     val h2               = "1.4.200"
-    val http4s           = "0.23.0-M1"
+    val http4s           = "1.0.0-M22"
     val jawn             = "1.1.2"
     val log4j            = "2.14.1"
     val organizeImports  = "0.5.0"
@@ -35,7 +35,7 @@ object Dependencies {
       "org.apache.logging.log4j"      % "log4j-core"          % log4j,
       "org.apache.logging.log4j"      % "log4j-slf4j-impl"    % log4j,
       "org.flywaydb"                  % "flyway-core"         % flyway,
-      "org.http4s"                   %% "http4s-blaze-server" % http4s,
+      "org.http4s" % "http4s-blaze-server_3" % "1.0.0-M22",
       "org.http4s"                   %% "http4s-circe"        % http4s,
       "org.http4s"                   %% "http4s-dsl"          % http4s,
       "org.tpolecat"                 %% "doobie-core"         % doobie,
