@@ -16,7 +16,7 @@ object Dependencies {
     val pureConfig       = "0.16.0"
     val zio              = "1.0.11"
     val zioInteropCats   = "2.5.1.0"
-    val zioLogging       = "0.5.11"
+    val zioLogging       = "0.5.12"
   }
   import Versions._
 
