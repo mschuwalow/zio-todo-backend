@@ -6,7 +6,7 @@ object Dependencies {
     val betterMonadicFor = "0.3.1"
     val circe            = "0.14.1"
     val doobie           = "0.13.4"
-    val flyway           = "7.15.0"
+    val flyway           = "8.0.2"
     val h2               = "1.4.200"
     val http4s           = "0.21.26"
     val jawn             = "1.0.1"
