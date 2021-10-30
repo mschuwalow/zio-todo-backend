@@ -6,7 +6,7 @@ object Dependencies {
     val betterMonadicFor = "0.3.1"
     val circe            = "0.14.1"
     val doobie           = "0.13.4"
-    val flyway           = "7.14.1"
+    val flyway           = "7.15.0"
     val h2               = "1.4.200"
     val http4s           = "0.21.31"
     val jawn             = "1.0.1"
@@ -14,9 +14,9 @@ object Dependencies {
     val log4j            = "2.14.1"
     val organizeImports  = "0.5.0"
     val pureConfig       = "0.17.0"
-    val zio              = "1.0.11"
+    val zio              = "1.0.12"
     val zioInteropCats   = "2.5.1.0"
-    val zioLogging       = "0.5.12"
+    val zioLogging       = "0.5.13"
   }
   import Versions._
 
