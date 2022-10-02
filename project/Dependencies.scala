@@ -4,19 +4,19 @@ object Dependencies {
 
   object Versions {
     val betterMonadicFor = "0.3.1"
-    val circe            = "0.14.1"
+    val circe            = "0.14.2"
     val doobie           = "0.13.4"
-    val flyway           = "8.0.4"
-    val h2               = "2.0.202"
+    val flyway           = "9.1.6"
+    val h2               = "2.1.214"
     val http4s           = "0.21.26"
-    val jawn             = "1.0.1"
+    val jawn             = "1.4.0"
     val kindProjector    = "0.13.2"
-    val log4j            = "2.15.0"
+    val log4j            = "2.18.0"
     val organizeImports  = "0.6.0"
     val pureConfig       = "0.17.1"
-    val zio              = "1.0.13"
+    val zio              = "1.0.16"
     val zioInteropCats   = "2.5.1.0"
-    val zioLogging       = "0.5.13"
+    val zioLogging       = "0.5.14"
   }
   import Versions._
 
