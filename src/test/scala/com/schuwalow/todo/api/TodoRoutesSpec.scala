@@ -1,7 +1,6 @@
-package com.schuwalow.todo.http
+package com.schuwalow.todo.api
 
-import com.schuwalow.todo.http.HTTPSpec._
-import com.schuwalow.todo.repository.TodoRepository
+import com.schuwalow.todo.TodoRepository
 import com.schuwalow.todo.testing.InMemoryTodoRepository
 import io.circe.Decoder
 import io.circe.literal._
@@ -12,14 +11,14 @@ import zio._
 import zio.interop.catz._
 import zio.test._
 
-object TodoServiceSpec extends DefaultRunnableSpec {
+object TodoServiceSpec extends ZIOSpecDefault with HttpSpec {
   type TodoTask[A] = RIO[TodoRepository, A]
 
-  val app = TodoService.routes[TodoRepository]("").orNotFound
+  val app = TodoRoutes.routes[TodoRepository]("").orNotFound
 
   override def spec =
     suite("TodoService")(
-      testM("should create new todo items") {
+      test("should create new todo items") {
         val req = request[TodoTask](Method.POST, "/")
           .withEntity(json"""{"title": "Test"}""")
         checkRequest(
@@ -34,7 +33,7 @@ object TodoServiceSpec extends DefaultRunnableSpec {
           }""")
         )
       },
-      testM("should list all todo items") {
+      test("should list all todo items") {
         val setupReq =
           request[TodoTask](Method.POST, "/")
             .withEntity(json"""{"title": "Test"}""")
@@ -48,7 +47,7 @@ object TodoServiceSpec extends DefaultRunnableSpec {
             ]""")
         )
       },
-      testM("should delete todo items by id") {
+      test("should delete todo items by id") {
         val setupReq  =
           request[TodoTask](Method.POST, "/")
             .withEntity(json"""{"title": "Test"}""")
@@ -69,7 +68,7 @@ object TodoServiceSpec extends DefaultRunnableSpec {
           Some(json"""[]""")
         )
       },
-      testM("should delete all todo items") {
+      test("should delete all todo items") {
         val setupReq  =
           request[TodoTask](Method.POST, "/")
             .withEntity(json"""{"title": "Test"}""")
@@ -82,7 +81,7 @@ object TodoServiceSpec extends DefaultRunnableSpec {
           Some(json"""[]""")
         )
       },
-      testM("should update todo items") {
+      test("should update todo items") {
         val setupReq  =
           request[TodoTask](Method.POST, "/")
             .withEntity(json"""{"title": "Test"}""")
@@ -105,5 +104,5 @@ object TodoServiceSpec extends DefaultRunnableSpec {
             ]""")
         )
       }
-    ).provideSomeLayer[ZEnv](InMemoryTodoRepository.layer)
+    ).provide(InMemoryTodoRepository.layer)
 }

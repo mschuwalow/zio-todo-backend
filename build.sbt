@@ -14,8 +14,8 @@ addCommandAlias(
 
 inThisBuild(
   List(
-    organization := "com.schuwalow",
-    developers := List(
+    organization      := "com.schuwalow",
+    developers        := List(
       Developer(
         "mschuwalow",
         "Maxim Schuwalow",
@@ -23,28 +23,27 @@ inThisBuild(
         url("https://github.com/mschuwalow")
       )
     ),
-    licenses := Seq(
+    licenses          := Seq(
       "MIT" -> url(
         s"https://github.com/mschuwalow/zio-todo-backend/blob/master/LICENSE"
       )
     ),
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
-    scalaVersion := "2.13.12",
-    scalafixDependencies ++= Dependencies.ScalaFix
+    scalaVersion      := "2.13.12"
   )
 )
 
 lazy val root = (project in file("."))
   .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
   .settings(
-    dockerBaseImage := "openjdk:11-jre-slim-buster",
+    dockerBaseImage              := "openjdk:11-jre-slim-buster",
     dockerExposedPorts in Docker := Seq(8080),
-    dockerUsername in Docker := Some("mschuwalow"),
+    dockerUsername in Docker     := Some("mschuwalow"),
     libraryDependencies ++= Dependencies.App,
-    name := "zio-todo-backend",
-    scalacOptions in ThisBuild := Options.scalacOptions(scalaVersion.value, isSnapshot.value),
-    testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
+    name                         := "zio-todo-backend",
+    scalacOptions in ThisBuild   := Options.scalacOptions(scalaVersion.value, isSnapshot.value),
+    testFrameworks               := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )
 
 releaseProcess := Release.releaseProcess

@@ -1,11 +1,9 @@
 package com.schuwalow.todo.testing
 
 import com.schuwalow.todo._
-import com.schuwalow.todo.repository.TodoRepository
 import zio._
 
-final private class InMemoryTodoRepository(ref: Ref[Map[TodoId, TodoItem]], counter: Ref[Long])
-    extends TodoRepository.Service {
+final case class InMemoryTodoRepository(ref: Ref[Map[TodoId, TodoItem]], counter: Ref[Long]) extends TodoRepository {
 
   override def getAll: UIO[List[TodoItem]] = ref.get.map(_.values.toList)
 
@@ -40,8 +38,8 @@ final private class InMemoryTodoRepository(ref: Ref[Map[TodoId, TodoItem]], coun
 
 object InMemoryTodoRepository {
 
-  val layer: ZLayer[Any, Nothing, TodoRepository] =
-    ZLayer.fromEffect {
+  val layer: ZLayer[Any, Nothing, InMemoryTodoRepository] =
+    ZLayer {
       for {
         ref     <- Ref.make(Map.empty[TodoId, TodoItem])
         counter <- Ref.make(0L)
