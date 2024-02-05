@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  update_release_draft:
+  update-release-draft:
     runs-on: ubuntu-20.04
     permissions:
       contents: write

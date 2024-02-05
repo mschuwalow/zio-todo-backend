@@ -27,16 +27,16 @@ inThisBuild(
 )
 
 lazy val root = (project in file("."))
-  .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
+  .enablePlugins(JavaAppPackaging, DockerPlugin)
   .settings(
     name                        := "zio-todo-backend",
-    dockerBaseImage             := "openjdk:17-jre-slim-buster",
-    dynverSeparator             := "-",
+    dockerBaseImage             := "eclipse-temurin:17-jre",
     libraryDependencies ++= Dependencies.App,
     scalacOptions               := Options.scalacOptions(scalaVersion.value, isSnapshot.value),
     testFrameworks              := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
     publish / skip              := true,
     Compile / mainClass         := Some("com.schuwalow.todo.Main"),
     Docker / dockerExposedPorts := Seq(8080),
-    Docker / dockerUsername     := Some("mschuwalow")
+    Docker / dockerUsername     := Some("mschuwalow"),
+    inConfig(Docker)(DynVerPlugin.buildSettings ++ Seq(dynverSeparator := "-"))
   )
