@@ -1,7 +1,6 @@
 package com.schuwalow.todo.api
 
-import com.schuwalow.todo.TodoRepository
-import com.schuwalow.todo.testing.InMemoryTodoRepository
+import com.schuwalow.todo.{BaseSpec, InMemoryTodoRepository, TodoRepository}
 import io.circe.Decoder
 import io.circe.literal._
 import org.http4s.circe._
@@ -9,9 +8,8 @@ import org.http4s.implicits._
 import org.http4s.{Status, _}
 import zio._
 import zio.interop.catz._
-import zio.test._
 
-object TodoServiceSpec extends ZIOSpecDefault with HttpSpec {
+object TodoServiceSpec extends BaseSpec with HttpSpec {
   type TodoTask[A] = RIO[TodoRepository, A]
 
   val app = TodoRoutes.routes[TodoRepository]("").orNotFound

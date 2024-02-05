@@ -1,47 +1,50 @@
 package com.schuwalow.todo
 
+import doobie.Transactor
 import doobie.hikari.{Config => HikariConfig, _}
 import org.flywaydb.core.Flyway
 import zio._
 import zio.config.magnolia.deriveConfig
 import zio.interop.catz._
-import doobie.Transactor
 
 object db {
 
-  final case class DatabaseConfig(url: String, driver: String, user: String, password: String)
+  final case class DatabaseConfig(url: String, driver: String, user: String, password: String, cleanAllowed: Boolean)
 
   object DatabaseConfig {
     val desc: Config[DatabaseConfig] = deriveConfig[DatabaseConfig]
-    val load: Task[DatabaseConfig]   = ZIO.configProviderWith(_.nested("todo").nested("db").load(desc))
+    val load: Task[DatabaseConfig]   = ZIO.configProviderWith(_.nested("db").nested("todo").load(desc))
   }
 
-  def transactorLayer: TaskLayer[Transactor[Task]] = {
-    def migrate(cfg: DatabaseConfig): Task[Unit] =
-      ZIO.attempt {
-        Flyway
-          .configure()
-          .dataSource(cfg.url, cfg.user, cfg.password)
-          .load()
-          .migrate()
-      }.unit
+  def transactor: TaskLayer[Transactor[Task] with Flyway] =
+    ZLayer.scopedEnvironment {
+      def loadFlyway(cfg: DatabaseConfig): Task[Flyway] =
+        ZIO.attempt {
+          Flyway
+            .configure()
+            .dataSource(cfg.url, cfg.user, cfg.password)
+            .cleanDisabled(!cfg.cleanAllowed)
+            .load()
+        }
 
-    def mkTransactor(cfg: DatabaseConfig): RIO[Scope, HikariTransactor[Task]] = {
-      val hikariConfig = HikariConfig(
-        jdbcUrl = cfg.url,
-        driverClassName = Some(cfg.driver),
-        username = Some(cfg.user),
-        password = Some(cfg.password)
-      )
-      HikariTransactor.fromConfig[Task](hikariConfig).toScopedZIO
-    }
+      def makeTransactor(cfg: DatabaseConfig): RIO[Scope, HikariTransactor[Task]] = {
+        val hikariConfig = HikariConfig(
+          jdbcUrl = cfg.url,
+          driverClassName = Some(cfg.driver),
+          username = Some(cfg.user),
+          password = Some(cfg.password)
+        )
+        HikariTransactor.fromConfig[Task](hikariConfig).toScopedZIO
+      }
 
-    ZLayer.scoped {
       for {
         cfg        <- DatabaseConfig.load
-        _          <- migrate(cfg)
-        transactor <- mkTransactor(cfg)
-      } yield transactor
+        flyway     <- loadFlyway(cfg)
+        transactor <- makeTransactor(cfg)
+      } yield ZEnvironment[Flyway, Transactor[Task]](flyway, transactor)
     }
-  }
+
+  def migrated: TaskLayer[Transactor[Task] with Flyway] =
+    transactor.tap(env => ZIO.attempt(env.get[Flyway].migrate()))
+
 }

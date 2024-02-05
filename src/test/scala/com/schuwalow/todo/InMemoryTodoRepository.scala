@@ -1,6 +1,5 @@
-package com.schuwalow.todo.testing
+package com.schuwalow.todo
 
-import com.schuwalow.todo._
 import zio._
 
 final case class InMemoryTodoRepository(ref: Ref[Map[TodoId, TodoItem]], counter: Ref[Long]) extends TodoRepository {

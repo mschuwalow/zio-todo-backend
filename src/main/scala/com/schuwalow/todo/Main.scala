@@ -14,7 +14,7 @@ object Main extends ZIOAppDefault {
     ZLayer
       .make[Any](
         api.startApi,
-        db.transactorLayer,
+        db.migrated,
         DoobieTodoRepository.layer
       )
       .launch
