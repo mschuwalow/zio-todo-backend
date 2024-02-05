@@ -10,10 +10,8 @@ object Dependencies {
     val h2               = "2.2.224"
     val http4s           = "0.23.25"
     val blaze            = "0.23.16"
-    val jawn             = "1.5.1"  // remove
     val kindProjector    = "0.13.2"
     val log4j            = "2.22.1"
-    val pureConfig       = "0.17.5" // remove
     val zio              = "2.0.21"
     val zioConfig        = "4.0.1"
     val zioInteropCats   = "23.1.0.0"
@@ -23,7 +21,6 @@ object Dependencies {
 
   val App =
     List(
-      "com.github.pureconfig"        %% "pureconfig"          % pureConfig,
       "com.h2database"                % "h2"                  % h2,
       "dev.zio"                      %% "zio-config-magnolia" % zioConfig,
       "dev.zio"                      %% "zio-config-typesafe" % zioConfig,
@@ -46,7 +43,6 @@ object Dependencies {
       "org.tpolecat"                 %% "doobie-core"         % doobie,
       "org.tpolecat"                 %% "doobie-h2"           % doobie,
       "org.tpolecat"                 %% "doobie-hikari"       % doobie,
-      "org.typelevel"                %% "jawn-parser"         % jawn  % "test",
       compilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicFor),
       compilerPlugin(("org.typelevel" % "kind-projector"      % kindProjector).cross(CrossVersion.full))
     )

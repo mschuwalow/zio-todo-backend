@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  pull_request: {}
+  push:
+    branches:
+      - 'main'
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v3.0.2
+      with:
+        fetch-depth: 0
+
+    - uses: olafurpg/setup-scala@v13
+      with:
+        java-version: openjdk@1.17.0
+
+    - name: Lint code
+      run: |
+        sbt 'check'
+
+    - name: Run tests
+      run: |
+        sbt 'test'
+
+    - name: Test publishing
+      run: |
+        sbt 'docker:publishLocal'

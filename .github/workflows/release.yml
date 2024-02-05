@@ -1,0 +1,23 @@
+name: Release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: olafurpg/setup-scala@v13
+        with:
+          java-version: openjdk@1.17.0
+
+      - run: sbt 'docker:publish'
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASS: ${{ secrets.DOCKER_PASS }}
