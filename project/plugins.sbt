@@ -3,5 +3,3 @@ addSbtPlugin("ch.epfl.scala"    % "sbt-scalafix"              % "0.11.1")
 addSbtPlugin("com.github.sbt"   % "sbt-native-packager"       % "1.9.16")
 addSbtPlugin("com.github.cb372" % "sbt-explicit-dependencies" % "0.3.1")
 addSbtPlugin("com.github.sbt"   % "sbt-dynver"                % "5.0.1")
-
-libraryDependencies += "com.spotify" % "docker-client" % "8.16.0"
