@@ -1,6 +1,6 @@
-| CI |
-| --- |
-|[![CircleCI](https://circleci.com/gh/mschuwalow/zio-todo-backend/tree/develop.svg?style=svg)](https://circleci.com/gh/mschuwalow/zio-todo-backend/tree/develop) |
+|CI|
+|---|
+|![CI Badge](https://github.com/mschuwalow/zio-todo-backend/actions/workflows/ci.yml/badge.svg?branch=main)|
 
 # ZIO TODO Backend
 _Todo-Backend (https://www.todobackend.com/) implementation using ZIO, http4s, doobie and circe_
