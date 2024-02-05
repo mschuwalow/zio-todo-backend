@@ -1,0 +1,21 @@
+name: Enable Automerge
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+
+jobs:
+  enable-auto-merge:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'automerge')
+    permissions:
+      contents: write
+    steps:
+    - run: gh pr merge --merge --auto "$PR_URL"
+      env:
+        PR_URL: ${{github.event.pull_request.html_url}}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

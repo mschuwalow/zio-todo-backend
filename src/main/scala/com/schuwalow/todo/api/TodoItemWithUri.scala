@@ -1,4 +1,4 @@
-package com.schuwalow.todo.http
+package com.schuwalow.todo.api
 
 import com.schuwalow.todo._
 import io.circe.generic.semiauto._

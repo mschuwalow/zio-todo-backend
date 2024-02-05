@@ -2,20 +2,14 @@ addCommandAlias("build", "prepare; test")
 addCommandAlias("prepare", "fix; fmt")
 addCommandAlias("check", "fixCheck; fmtCheck")
 addCommandAlias("fix", "all compile:scalafix test:scalafix")
-addCommandAlias(
-  "fixCheck",
-  "compile:scalafix --check; test:scalafix --check"
-)
+addCommandAlias("fixCheck", "compile:scalafix --check; test:scalafix --check")
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
-addCommandAlias(
-  "fmtCheck",
-  "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck"
-)
+addCommandAlias("fmtCheck", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
 
 inThisBuild(
   List(
-    organization := "com.schuwalow",
-    developers := List(
+    organization      := "com.schuwalow",
+    developers        := List(
       Developer(
         "mschuwalow",
         "Maxim Schuwalow",
@@ -23,28 +17,26 @@ inThisBuild(
         url("https://github.com/mschuwalow")
       )
     ),
-    licenses := Seq(
-      "MIT" -> url(
-        s"https://github.com/mschuwalow/zio-todo-backend/blob/master/LICENSE"
-      )
+    licenses          := Seq(
+      "MIT" -> url(s"https://github.com/mschuwalow/zio-todo-backend/blob/master/LICENSE")
     ),
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
-    scalaVersion := "2.13.12",
-    scalafixDependencies ++= Dependencies.ScalaFix
+    scalaVersion      := "2.13.12"
   )
 )
 
 lazy val root = (project in file("."))
-  .enablePlugins(JavaAppPackaging, DockerSpotifyClientPlugin)
+  .enablePlugins(JavaAppPackaging, DockerPlugin)
   .settings(
-    dockerBaseImage := "openjdk:11-jre-slim-buster",
-    dockerExposedPorts in Docker := Seq(8080),
-    dockerUsername in Docker := Some("mschuwalow"),
+    name                        := "zio-todo-backend",
+    dockerBaseImage             := "eclipse-temurin:17-jre",
     libraryDependencies ++= Dependencies.App,
-    name := "zio-todo-backend",
-    scalacOptions in ThisBuild := Options.scalacOptions(scalaVersion.value, isSnapshot.value),
-    testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
+    scalacOptions               := Options.scalacOptions(scalaVersion.value, isSnapshot.value),
+    testFrameworks              := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
+    publish / skip              := true,
+    Compile / mainClass         := Some("com.schuwalow.todo.Main"),
+    Docker / dockerExposedPorts := Seq(8080),
+    Docker / dockerUsername     := Some("mschuwalow"),
+    inConfig(Docker)(DynVerPlugin.buildSettings ++ Seq(dynverSeparator := "-"))
   )
-
-releaseProcess := Release.releaseProcess

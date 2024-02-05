@@ -1,12 +1,12 @@
-package com.schuwalow.todo.http
+package com.schuwalow.todo.api
 
-import org.http4s.{EntityDecoder, Method, Request, Response, Status, Uri}
+import org.http4s._
 import zio._
 import zio.interop.catz._
 import zio.test.Assertion._
 import zio.test._
 
-object HTTPSpec {
+trait HttpSpec {
 
   def request[F[_]](
     method: Method,
@@ -24,8 +24,8 @@ object HTTPSpec {
       actual      <- actual
       bodyResult  <- expectedBody
                        .fold[RIO[R, TestResult]](
-                         assertM(actual.bodyText.compile.toVector)(isEmpty)
-                       )(expected => assertM(actual.as[A])(equalTo(expected)))
+                         assertZIO(actual.bodyText.compile.toVector)(isEmpty)
+                       )(expected => assertZIO(actual.as[A])(equalTo(expected)))
       statusResult = assert(actual.status)(equalTo(expectedStatus))
     } yield bodyResult && statusResult
 

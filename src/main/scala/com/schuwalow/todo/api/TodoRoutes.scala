@@ -1,7 +1,6 @@
-package com.schuwalow.todo.http
+package com.schuwalow.todo.api
 
 import com.schuwalow.todo._
-import com.schuwalow.todo.repository._
 import io.circe.{Decoder, Encoder}
 import org.http4s._
 import org.http4s.circe._
@@ -9,7 +8,8 @@ import org.http4s.dsl.Http4sDsl
 import zio._
 import zio.interop.catz._
 
-object TodoService {
+object TodoRoutes {
+  type Env = TodoRepository
 
   def routes[R <: TodoRepository](rootUri: String): HttpRoutes[RIO[R, *]] = {
     type TodoTask[A] = RIO[R, A]
