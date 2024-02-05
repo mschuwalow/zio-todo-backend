@@ -47,6 +47,7 @@ object TodoRepositoySpec extends BaseSpec {
   val spec = suite("TodoRepository")(
     makeSuite("InMemoryTodoRepository").provide(InMemoryTodoRepository.layer),
     makeSuite("DoobieTodoRepository")
+      .@@(TestAspect.sequential)
       .@@(
         TestAspect.around(
           ZIO.serviceWithZIO[Flyway](fw => ZIO.attempt(fw.migrate())),
