@@ -1,20 +1,13 @@
-name: Perform PR actions
+name: Enable Automerge
 
 on:
-  pull_request_target: {}
+  workflow_run:
+    workflows: ["Label PR"]
+    types:
+      - completed
 
 jobs:
-  label-pr:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - uses: srvaroa/labeler@v1
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
   enable-auto-merge:
-    needs: label-pr
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'automerge')
     permissions:
