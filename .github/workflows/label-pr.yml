@@ -4,12 +4,32 @@ on:
   pull_request_target: {}
 
 jobs:
-  pr-labeler:
+  update-pr-labels:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
+    outputs:
+      labels: ${{ steps.get-pr-labels.outputs.value }}
+    env:
+      PR_URL: ${{github.event.pull_request.html_url}}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: srvaroa/labeler@v1
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      - run: gh pr view --json labels $PR_URL > pr-labels.json
+      - id: get-pr-labels
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: cat pr-labels.json | jq -c '.labels | map(.name)'
+
+  enable-auto-merge:
+    needs: update-pr-labels
+    runs-on: ubuntu-latest
+    if: contains(fromJSON(needs.update-pr-labels.outputs.labels), 'automerge')
+    permissions:
+      contents: write
+    steps:
+    - run: gh pr merge --merge --auto "$PR_URL"
+      env:
+        PR_URL: ${{github.event.pull_request.html_url}}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
