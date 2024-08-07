@@ -14,7 +14,7 @@ object Dependencies {
     val log4j            = "2.23.1"
     val zio              = "2.1.7"
     val zioConfig        = "4.0.2"
-    val zioInteropCats   = "23.1.0.2"
+    val zioInteropCats   = "23.1.0.3"
     val zioLogging       = "2.3.0"
   }
   import Versions._
