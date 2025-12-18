@@ -11,7 +11,7 @@ object Dependencies {
     val http4s           = "0.23.33"
     val blaze            = "0.23.17"
     val kindProjector    = "0.13.4"
-    val log4j            = "2.25.2"
+    val log4j            = "2.25.3"
     val zio              = "2.1.23"
     val zioConfig        = "4.0.6"
     val zioInteropCats   = "23.1.0.12"
