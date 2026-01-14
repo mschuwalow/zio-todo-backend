@@ -1,5 +1,5 @@
 addSbtPlugin("org.scalameta"    % "sbt-scalafmt"              % "2.5.6")
 addSbtPlugin("ch.epfl.scala"    % "sbt-scalafix"              % "0.14.5")
-addSbtPlugin("com.github.sbt"   % "sbt-native-packager"       % "1.11.5")
+addSbtPlugin("com.github.sbt"   % "sbt-native-packager"       % "1.11.7")
 addSbtPlugin("com.github.cb372" % "sbt-explicit-dependencies" % "0.3.1")
 addSbtPlugin("com.github.sbt"   % "sbt-dynver"                % "5.1.1")
