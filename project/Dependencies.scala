@@ -5,7 +5,7 @@ object Dependencies {
   object Versions {
     val betterMonadicFor = "0.3.1"
     val circe            = "0.14.15"
-    val doobie           = "1.0.0-RC12"
+    val doobie           = "1.0.0-RC13"
     val flyway           = "12.8.1"
     val h2               = "2.4.240"
     val http4s           = "0.23.34"
@@ -40,9 +40,9 @@ object Dependencies {
       "org.http4s"              %% "http4s-blaze-server" % blaze,
       "org.http4s"              %% "http4s-circe"        % http4s,
       "org.http4s"              %% "http4s-dsl"          % http4s,
-      "org.tpolecat"            %% "doobie-core"         % doobie,
-      "org.tpolecat"            %% "doobie-h2"           % doobie,
-      "org.tpolecat"            %% "doobie-hikari"       % doobie,
+      "org.typelevel"           %% "doobie-core"         % doobie,
+      "org.typelevel"           %% "doobie-h2"           % doobie,
+      "org.typelevel"           %% "doobie-hikari"       % doobie,
       compilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicFor),
       compilerPlugin(("org.typelevel" % "kind-projector" % kindProjector).cross(CrossVersion.full))
     )
