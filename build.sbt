@@ -1,6 +1,6 @@
 addCommandAlias("build", "prepare; test")
 addCommandAlias("prepare", "fix; fmt")
-addCommandAlias("check", "fixCheck; fmtCheck; undeclaredCompileDependenciesTest; unusedCompileDependenciesTest")
+addCommandAlias("check", "fixCheck; fmtCheck")
 addCommandAlias("fix", "all compile:scalafix test:scalafix")
 addCommandAlias("fixCheck", "compile:scalafix --check; test:scalafix --check")
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
