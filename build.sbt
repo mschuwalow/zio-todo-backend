@@ -22,7 +22,7 @@ inThisBuild(
     ),
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
-    scalaVersion      := "3.8.4"
+    scalaVersion      := "2.13.16"
   )
 )
 

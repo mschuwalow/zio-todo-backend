@@ -4,18 +4,18 @@ object Dependencies {
 
   object Versions {
     val betterMonadicFor = "0.3.1"
-    val circe            = "0.14.15"
-    val doobie           = "1.0.0-RC13"
-    val flyway           = "12.8.1"
-    val h2               = "2.4.240"
-    val http4s           = "0.23.34"
+    val circe            = "0.14.14"
+    val doobie           = "1.0.0-RC10"
+    val flyway           = "11.10.3"
+    val h2               = "2.3.232"
+    val http4s           = "0.23.30"
     val blaze            = "0.23.17"
-    val kindProjector    = "0.13.4"
-    val log4j            = "2.26.0"
-    val zio              = "2.1.26"
-    val zioConfig        = "4.0.7"
-    val zioInteropCats   = "23.1.0.13"
-    val zioLogging       = "2.5.3"
+    val kindProjector    = "0.13.3"
+    val log4j            = "2.25.1"
+    val zio              = "2.1.19"
+    val zioConfig        = "4.0.4"
+    val zioInteropCats   = "23.1.0.5"
+    val zioLogging       = "2.5.1"
   }
   import Versions._
 
@@ -40,9 +40,9 @@ object Dependencies {
       "org.http4s"              %% "http4s-blaze-server" % blaze,
       "org.http4s"              %% "http4s-circe"        % http4s,
       "org.http4s"              %% "http4s-dsl"          % http4s,
-      "org.typelevel"           %% "doobie-core"         % doobie,
-      "org.typelevel"           %% "doobie-h2"           % doobie,
-      "org.typelevel"           %% "doobie-hikari"       % doobie,
+      "org.tpolecat"            %% "doobie-core"         % doobie,
+      "org.tpolecat"            %% "doobie-h2"           % doobie,
+      "org.tpolecat"            %% "doobie-hikari"       % doobie,
       compilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicFor),
       compilerPlugin(("org.typelevel" % "kind-projector" % kindProjector).cross(CrossVersion.full))
     )
