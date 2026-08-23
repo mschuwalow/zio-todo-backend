@@ -10,7 +10,7 @@ object Dependencies {
     val h2               = "2.3.232"
     val http4s           = "0.23.30"
     val blaze            = "0.23.17"
-    val kindProjector    = "0.13.3"
+    val kindProjector    = "0.13.4"
     val log4j            = "2.25.5"
     val zio              = "2.1.19"
     val zioConfig        = "4.0.4"
@@ -44,7 +44,7 @@ object Dependencies {
       "org.tpolecat"            %% "doobie-h2"           % doobie,
       "org.tpolecat"            %% "doobie-hikari"       % doobie,
       compilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicFor),
-      compilerPlugin(("org.typelevel" % "kind-projector" % kindProjector).cross(CrossVersion.full))
+      compilerPlugin(("org.typelevel" %% "kind-projector" % kindProjector).cross(CrossVersion.full))
     )
 
 }

@@ -1,6 +1,6 @@
 addCommandAlias("build", "prepare; test")
 addCommandAlias("prepare", "fix; fmt")
-addCommandAlias("check", "fixCheck; fmtCheck")
+addCommandAlias("check", "fixCheck; fmtCheck; undeclaredCompileDependenciesTest; unusedCompileDependenciesTest")
 addCommandAlias("fix", "all compile:scalafix test:scalafix")
 addCommandAlias("fixCheck", "compile:scalafix --check; test:scalafix --check")
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
@@ -22,7 +22,7 @@ inThisBuild(
     ),
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
-    scalaVersion      := "2.13.16"
+    scalaVersion      := "2.13.18"
   )
 )
 
